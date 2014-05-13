@@ -168,8 +168,8 @@ os.chdir(thepath)
 #Path to original FEL data:  
 fel_data_path = thepath
 # input parameters for updating FAST2XY_2013.dat
-trd1 = 1.9                    # Start time for conversion (fs)
-trd2 = 10.9                 # End time for conversion (fs)
+trd1 = 5.9                    # Start time for conversion (fs)
+trd2 = 14.9                 # End time for conversion (fs)
 nxy = 100                     # Mesh parameter, number of nodes = 2*NXY=+1
 nskip = 8                     # skip nskip slices	
 ifb = 1001                    # File No. (FAST FEL code run number)

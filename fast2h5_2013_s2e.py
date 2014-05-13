@@ -330,8 +330,9 @@ wf_struct['params']['Mesh']={
     'zCoord':(0.0,'d')
    }
 
+#1e3: |E|^2 in W/mm^2 
 wf_struct['data']={
-    'arrEver':(wf_data*numpy.sqrt(RK1),'f'),
+    'arrEver':(wf_data*numpy.sqrt(RK1)/xStep*1e3,'f'),
     'arrEhor':(numpy.zeros(shape=wf_data.shape,dtype='float32'),'f')
     }
 wf_struct['misc']={

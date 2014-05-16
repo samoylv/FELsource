@@ -1,6 +1,13 @@
 # -*- coding: utf-8 -*-
 # <nbformat>3.0</nbformat>
 
+# Contact L.Samoylova <liubov.samoylova@xfel.eu>, A.Buzmakov <buzmakov@gmail.com>
+# SPB S2E simulation project, European XFEL Hamburg <www.xfel.eu>
+# May 2014
+# Wave optics software is based on
+# SRW core library <https://github.com/ochubar/SRW>, and
+# WPG framework <https://github.com/samoylv/WPG>
+
 # <codecell>
 
 #$%pylab inline

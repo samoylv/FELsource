@@ -1,0 +1,7 @@
+12.0 # TB: Start time (fs)
+21.0 # TE: End time (fs)
+100 # NXY: Number of xy nodes
+8 # skip slices (1 - no skip)
+1001 # XXXX	Run number (Input file name TXXXXYYY.RES)
+33 # YYY	Point of output in z
+SASE1_5keV_14GeV_LP_ # File name

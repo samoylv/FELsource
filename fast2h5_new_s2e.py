@@ -463,7 +463,7 @@ def add_wf_attributes(fname0):
 
 # <codecell>
 
-def convert_fast2h5(fel_data_path,fast2xyexe,fast2xydat):
+def convert_fast2h5(fel_data_path,fast2xyexe,fast2xydat,namg):
     ifname=set_iname_2014(namg,ifb,nzc)+'.RES'
     fulltname=fel_data_path+ifname
     print 'fulltname:',fulltname
@@ -570,7 +570,7 @@ def main():
     shutil.copy(os.path.join(thepath,fast2xyexe), tmp_dir+'/')
 
     os.chdir(tmp_dir)
-    in_fname=convert_fast2h5(fel_data_path,fast2xyexe,out_fast2xydat)
+    in_fname=convert_fast2h5(fel_data_path,fast2xyexe,out_fast2xydat,namg)
     out_fname=set_FELout_name(in_fname,trd1)
     print 'in_fname,out_fname:',in_fname,out_fname
     os.system('chmod a+rw '+ tmp_dir+'/*.*')    
@@ -610,7 +610,7 @@ else:
     shutil.copy(os.path.join(thepath,fast2xyexe), tmp_dir+'/')
 
     os.chdir(tmp_dir)
-    in_fname=convert_fast2h5(fel_data_path,fast2xyexe,out_fast2xydat)
+    in_fname=convert_fast2h5(fel_data_path,fast2xyexe,out_fast2xydat,namg)
     out_fname=set_FELout_name(in_fname,trd1)
     print 'in_fname,out_fname:',in_fname,out_fname
     os.system('chmod a+rw '+ tmp_dir+'/*.*')    

@@ -542,6 +542,10 @@ def main():
     else:
         nzc=int(float(options.nzc))
 
+    if not options.namg: # if prefix is not given
+        namg = 'SASE1_5keV_14GeV_LP_'
+    else:
+        namg=options.namg
 
     #copy-paste from else block of the cell below
     out_fast2xydat='PPROC-FAST2XY_2013.DAT'

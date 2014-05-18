@@ -283,10 +283,10 @@ def update(in_fast2xydat='PPROC-FAST2XY_2013_LP.DAT',trd1=0.,trd2=None,
     if namg <> None:
         strInputPar[6] = namg
     else:
-        namg = strInputPar[6]
+        namg = strInputPar[6].strip()
     print '==Afterwards=='
     for idx in range(0,7): 
-        a[idx] = strInputPar[idx]+' #'+strComment[idx].rstrip()
+        a[idx] = strInputPar[idx].strip()+' #'+strComment[idx].rstrip()
 #    for idx in range(0,len(a)):
     for idx in range(0,7):
         print a[idx]
@@ -570,6 +570,8 @@ def main():
     shutil.copy(os.path.join(thepath,fast2xyexe), tmp_dir+'/')
 
     os.chdir(tmp_dir)
+    print 'namg,ifb,nzc:',namg,ifb,nzc
+    print 
     in_fname=convert_fast2h5(fel_data_path,fast2xyexe,out_fast2xydat,namg,ifb,nzc)
     out_fname=set_FELout_name(in_fname,trd1)
     print 'in_fname,out_fname:',in_fname,out_fname

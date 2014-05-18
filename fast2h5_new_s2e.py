@@ -67,8 +67,8 @@ def set_oname_2014(namg,namt,ifb,nz):
 # bname base name   
 # tmin is starting point of pulse chunk
 # return bname+'_'+str(tmin)+'fs'
-def set_FELout_name(bname,tmin):
-    strd1=str(int(numpy.floor(tmin)))
+def set_FELout_name(bname,trd1):
+    strd1=str(int(numpy.floor(trd1)))
     if (trd1+0.5) >(int(trd1) +1.):
         strd1=str(int(numpy.ceil(trd1)))
         fname = bname +'_'+strd1+'fs'

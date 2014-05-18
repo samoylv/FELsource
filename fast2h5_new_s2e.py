@@ -545,7 +545,9 @@ def main():
 
     #copy-paste from else block of the cell below
     out_fast2xydat='PPROC-FAST2XY_2013.DAT'
-    thepath = '/diskmnt/a/exflwgs03/lsamoylv/code/WPG-develop/samples/' 
+    #$thepath = '/diskmnt/a/exflwgs03/lsamoylv/code/WPG-develop/samples/' 
+    #@
+    thepath = '/data/S2E/modules/FELsource/' 
     fel_data_path='/pnfs/desy.de/exfel/disk/XFEL/2013/SIM/FAST/2013-EXFEL-S1-5keV-14GeV-LongPulse/'
     os.chdir(thepath)
 
@@ -583,7 +585,9 @@ else:
     in_fast2xydat='PPROC-FAST2XY_2013_LP.DAT';trd1=12.;nskip=8;nzc=33
     
     out_fast2xydat='PPROC-FAST2XY_2013.DAT'
-    thepath = '/diskmnt/a/exflwgs03/lsamoylv/code/WPG-develop/samples/' 
+    #$thepath = '/diskmnt/a/exflwgs03/lsamoylv/code/WPG-develop/samples/' 
+    #@
+    thepath = '/data/S2E/modules/FELsource/' 
     fel_data_path='/pnfs/desy.de/exfel/disk/XFEL/2013/SIM/FAST/2013-EXFEL-S1-5keV-14GeV-LongPulse/'
     os.chdir(thepath)
 

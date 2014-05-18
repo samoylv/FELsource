@@ -535,11 +535,12 @@ def main():
     if not options.trd1:   # if time value not given
         parser.error('Start time value not given')
     else:
-        trd1=options.trd1
+        trd1=float(options.trd1)
+
     if not options.nzc:   # if nzc value not given
         nzc=33 #default value
     else:
-        nzc=options.nzc
+        nzc=int(float(options.nzc))
 
 
     #copy-paste from else block of the cell below
@@ -574,8 +575,7 @@ def main():
 
 # <codecell>
 
-if False:
-    if __name__ == '__main__':
+if __name__ == '__main__':
         main()
 else:
     # typical command line parameters:

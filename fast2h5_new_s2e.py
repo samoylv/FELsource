@@ -10,7 +10,7 @@ import os
 import errno
 
 #@
-sys.path.insert(0,'/data/S2E/packages/WPG/WPG-master')
+sys.path.insert(0,'/data/S2E/packages/WPG')
 #$sys.path.insert(0,'..')
 
 import shutil

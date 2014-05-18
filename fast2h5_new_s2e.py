@@ -481,7 +481,7 @@ def convert_fast2h5(fel_data_path,fast2xyexe,fast2xydat,namg,ifb,nzc):
 
     #wavefront structure based on glossary
     wf_struct={'version':(0.1,'f')}
-    RK1,nStart,nEnd = fill_wf_params(wf_struct, params,size(rows))
+    RK1,nStart,nEnd = fill_wf_params(wf_struct, params,numpy.size(rows))
     #build numpy arrays from list of rows
     wf_data=create_numpy_array_from_rows(rows,slices=range(nStart-1,nEnd))
     del rows

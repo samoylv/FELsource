@@ -570,9 +570,9 @@ def main():
     shutil.copy(os.path.join(thepath,fast2xyexe), tmp_dir+'/')
 
     os.chdir(tmp_dir)
-    print trd1:',trd1
+    print 'trd1:',trd1
     in_fname=convert_fast2h5(fel_data_path,fast2xyexe,out_fast2xydat,namg,ifb,nzc)
-    print trd1:',trd1
+    print 'trd1:',trd1
     out_fname=set_FELout_name(in_fname,trd1)
     print 'in_fname,out_fname:',in_fname,out_fname
     os.system('chmod a+rw '+ tmp_dir+'/*.*')    

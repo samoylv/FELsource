@@ -529,17 +529,26 @@ def main():
     
     if not options.in_fast2xydat:   # if filename is not given
         parser.error('Input parameter filename not given')
+    else:
+        in_fast2xydat=options.in_fast2xydat
    
     if not options.trd1:   # if time value not given
         parser.error('Start time value not given')
-    
+    else:
+        trd1=options.trd1
+    if not options.nzc:   # if nzc value not given
+        nzc=33 #default value
+    else:
+        nzc=options.nzc
+
+
     #copy-paste from else block of the cell below
     out_fast2xydat='PPROC-FAST2XY_2013.DAT'
     thepath = '/diskmnt/a/exflwgs03/lsamoylv/code/WPG-develop/samples/' 
     fel_data_path='/pnfs/desy.de/exfel/disk/XFEL/2013/SIM/FAST/2013-EXFEL-S1-5keV-14GeV-LongPulse/'
     os.chdir(thepath)
 
-    namg,ifb,nzc = update(in_fast2xydat,trd1,trd2=trd1+9,namg='SASE1_5keV_14GeV_LP_')
+    namg,ifb,nzc = update(in_fast2xydat,trd1,trd2=trd1+9,nzc=nzc)
     #print namg,ifb,nz
 
     fast2xyexe='pproc-fast2xy-2013-v2-06-wo-fname.exe'

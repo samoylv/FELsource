@@ -551,7 +551,7 @@ def main():
     out_fast2xydat='PPROC-FAST2XY_2013.DAT'
     #$thepath = '/diskmnt/a/exflwgs03/lsamoylv/code/WPG-develop/samples/' 
     #@
-    thepath = '/data/S2E/modules/FELsource/' 
+    thepath ='/data/S2E/data/FELsource/'
     fel_data_path='/pnfs/desy.de/exfel/disk/XFEL/2013/SIM/FAST/2013-EXFEL-S1-5keV-14GeV-LongPulse/'
     os.chdir(thepath)
 
@@ -593,7 +593,7 @@ else:
     out_fast2xydat='PPROC-FAST2XY_2013.DAT'
     #$thepath = '/diskmnt/a/exflwgs03/lsamoylv/code/WPG-develop/samples/' 
     #@
-    thepath = '/data/S2E/modules/FELsource/' 
+    thepath ='/data/S2E/data/FELsource/'
     fel_data_path='/pnfs/desy.de/exfel/disk/XFEL/2013/SIM/FAST/2013-EXFEL-S1-5keV-14GeV-LongPulse/'
     os.chdir(thepath)
 

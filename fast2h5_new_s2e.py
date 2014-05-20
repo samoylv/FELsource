@@ -632,11 +632,4 @@ else:
 
 # <codecell>
 
-%tb
-
-# <codecell>
-
-
-# <codecell>
-
 

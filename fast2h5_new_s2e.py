@@ -279,97 +279,97 @@ def update(in_fast2xydat='PPROC-FAST2XY_2013_LP.DAT',trd1=0.,trd2=None,
 
 def fill_wf_history_detail(wf_struct):
     wf_struct['history/parent/detail/info']={
-                                             'contact':(r'''Mikhail Yurkov
-                                             Evgeny Schneidmiller
+        'contact':(r'''Mikhail Yurkov
+        Evgeny Schneidmiller
+
+        Deutsches Elektronen Synchrotron (DESY)
+        Notkestrasse 85
+        22607 Hamburg
+        Germany
                                              
-                                             Deutsches Elektronen Synchrotron (DESY)
-                                             Notkestrasse 85
-                                             22607 Hamburg
-                                             Germany
+        E-mail: mikhail.yurkov@desy.de
+        E-mail: evgeny.schneidmiller@desy.de
+        Tel. +49 40 8998 2676''','s'),
+        'data_description':(r'''SASE12, 5 keV, 14 GeV.
+        Current pulse lengthis 2.5 ps, or about 10^4 coherence time (0.25 fs) -
+        should be sufficient for any statistical analysis.
+        Test files are as usually temporal profile, intensity distributions in the near and far zone.
+        
+        Output data points for s2e simulations:
+        (see gain_curve):
+        No.    z(m)
+        15     35.5 (beginning of saturation regime)
+        18     42.7 (saturation regime)
+        25     59.5 (deep nonlinear)
+        33     78.7  -/-
+        42    100.3  -/- 
+        
+        File naming: ABCD.RES
+        A == Name of group
+        B == File Type
+        C == Sequential number of statistical run
+        D == Sequential number of output point along undulator
+        h == Frequency harmonic, h = 1, 3, 5, ...
+                                                     
+        File Type B:
+        T == raw data from FAST
+        FXYh == raw data from FAST, cartesian coordinate
+        Ph == Temporal structure of the radiation pulse for frequency harmonic
+        PZh == Energy in the radiation pulse versus undulator length
+        SFh == Power spectrum of the radiation pulse
+        Fh == Intensity distribution in the far zone
+        Nh == Intensity distribution in the near zone
+        FWHMh == Evolution along the undulator of the spot size and 
+        angular divirgence of the radiation
+        ***
+        Structure of data files
+        T == raw data from FAST
                                              
-                                             E-mail: mikhail.yurkov@desy.de
-                                             E-mail: evgeny.schneidmiller@desy.de
-                                             Tel. +49 40 8998 2676''','s'),
-                                             'data_description':(r'''SASE12, 5 keV, 14 GeV.
-                                             Current pulse lengthis 2.5 ps, or about 10^4 coherence time (0.25 fs) -
-                                             should be sufficient for any statistical analysis.
-                                             Test files are as usually temporal profile, intensity distributions in the near and far zone.
+        FXYh == raw data from FAST, cartesian coordinate
+        NXY x NXY x MZ complex array produced by routine fast2xy from FAST file T
+                                                     
+        Ph == Temporal structure of the radiation pulse for frequency harmonic h
+        col[0] Position along bunch  [cm]
+        col[1] Total radiation power [W]
+        col[2] Power loss by electrons [W]
+        col[3] Radiation power in harmonic h [W]
+        -n
+        ...  radiation power for frequency harmonic h and azimuthal mode m [W], m = -n .. n
+        n
                                              
-                                             Output data points for s2e simulations:
-                                             (see gain_curve):
-                                             No.    z(m)
-                                             15     35.5 (beginning of saturation regime)
-                                             18     42.7 (saturation regime)
-                                             25     59.5 (deep nonlinear)
-                                             33     78.7  -/-
-                                             42    100.3  -/- 
+        PZh == Energy in the radiation pulse versus undulator length (gain curve)
+        col[0] Sequential number of output point along undulator
+        col[1] Position along undulator [cm]
+        col[2] Total energy in the radiation pulse for frequency harmonic h [J]
+        col[3] Energy loss by electrons [J]
+        col[4:4+2*n] 
+        -n
+        ...   Energy in the radiation pulse for frequency harmonic h and 
+        ...   azimuthal harmonic m [J], m = -n .. n
+        n
                                              
-                                             File naming: ABCD.RES
-                                             A == Name of group
-                                             B == File Type
-                                             C == Sequential number of statistical run
-                                             D == Sequential number of output point along undulator
-                                             h == Frequency harmonic, h = 1, 3, 5, ...
+        SFh == Power spectrum of the radiation pulse in the far zone at zero angle
+        col[0] frequency dw/w [%]
+        col[1] Spectral power [normalized]
                                              
-                                             File Type B:
-                                             T == raw data from FAST
-                                             FXYh == raw data from FAST, cartesian coordinate
-                                             Ph == Temporal structure of the radiation pulse for frequency harmonic
-                                             PZh == Energy in the radiation pulse versus undulator length
-                                             SFh == Power spectrum of the radiation pulse
-                                             Fh == Intensity distribution in the far zone
-                                             Nh == Intensity distribution in the near zone
-                                             FWHMh == Evolution along the undulator of the spot size and 
-                                             angular divirgence of the radiation
-                                             ***
-                                             Structure of data files
-                                             T == raw data from FAST
+        Fh == Intensity distribution in the far zone
+        col[0] Angle [rad]
+        col[1] Radiation intensity
+                                                     
+        Nh == Intensity distribution in the near zone
+        col[0] Radial coordinate [cm]
+        col[1] Radiation intensity
                                              
-                                             FXYh == raw data from FAST, cartesian coordinate
-                                             NXY x NXY x MZ complex array produced by routine fast2xy from FAST file T
+        FWHMh == Evolution along the undulator of the spot size and 
+        col[0] angular divirgence of the radiation for frequency harmonic h
+        col[1] position along the undulator [cm]
+        col[2] FWHM spot size of the radiation [cm]
+        col[3] FWHM angular divergence of the radiation [rad]
+        col[4] Radiation pulse energy [J]
                                              
-                                             Ph == Temporal structure of the radiation pulse for frequency harmonic h
-                                             col[0] Position along bunch  [cm]
-                                             col[1] Total radiation power [W]
-                                             col[2] Power loss by electrons [W]
-                                             col[3] Radiation power in harmonic h [W]
-                                             -n
-                                             ...  radiation power for frequency harmonic h and azimuthal mode m [W], m = -n .. n
-                                             n
-                                             
-                                             PZh == Energy in the radiation pulse versus undulator length (gain curve)
-                                             col[0] Sequential number of output point along undulator
-                                             col[1] Position along undulator [cm]
-                                             col[2] Total energy in the radiation pulse for frequency harmonic h [J]
-                                             col[3] Energy loss by electrons [J]
-                                             col[4:4+2*n] 
-                                             -n
-                                             ...   Energy in the radiation pulse for frequency harmonic h and 
-                                             ...   azimuthal harmonic m [J], m = -n .. n
-                                             n
-                                             
-                                             SFh == Power spectrum of the radiation pulse in the far zone at zero angle
-                                             col[0] frequency dw/w [%]
-                                             col[1] Spectral power [normalized]
-                                             
-                                             Fh == Intensity distribution in the far zone
-                                             col[0] Angle [rad]
-                                             col[1] Radiation intensity
-                                             
-                                             Nh == Intensity distribution in the near zone
-                                             col[0] Radial coordinate [cm]
-                                             col[1] Radiation intensity
-                                             
-                                             FWHMh == Evolution along the undulator of the spot size and 
-                                             col[0] angular divirgence of the radiation for frequency harmonic h
-                                             col[1] position along the undulator [cm]
-                                             col[2] FWHM spot size of the radiation [cm]
-                                             col[3] FWHM angular divergence of the radiation [rad]
-                                             col[4] Radiation pulse energy [J]
-                                             
-                                             all other columns as well as SNn files are internal control information.''','s'),
-                                             'method_description':('Code: FAST (Schneidmiller Yurkov)','s'),
-                                             'source_data_path': ('http://dcache-door-photon03:2980/2013-EXFEL-S1-5keV-14GeV-LongPulse/','s')}
+        all other columns as well as SNn files are internal control information.''','s'),
+        'method_description':('Code: FAST (Schneidmiller Yurkov)','s'),
+        'source_data_path': ('http://dcache-door-photon03:2980/2013-EXFEL-S1-5keV-14GeV-LongPulse/','s')}
 
 # <codecell>
 
@@ -476,16 +476,20 @@ def convert_fast2h5(fel_data_path,fast2xyexe,fast2xydat,namg,ifb,nzc):
                        }
     fill_wf_history_detail(wf_struct)
     f_in = open(fast2xydat,'r')
+    
+    e_data =    numpy.loadtxt(os.path.join(tmp_dir,set_oname_2014(namg,'E'+str(1),ifb,nzc)+'.RES'))
+    #fwhm_data not defined 
+    #fwhm_data = numpy.loadtxt(os.path.join(tmp_dir,set_oname_2014(namg,'FWHM'+str(nharm)+'_',ifb,0)+'0.RES'))
+    #&pz_data_file = set_oname_2014(namg,'PZ'+str(nharm)+'_',ifb,0)+'0.RES'
+    #&pz_data = numpy.loadtxt(fel_data_path+pz_data_file)
+    pz_data_file = 'PZ'+str(ifb)+'.RES'
+    pz_data = numpy.loadtxt(thepath+pz_data_file)
     wf_struct['history/parent/detail/misc']={
-                                             'FAST2XY_DAT':(f_in.readlines(),'s')
+                                             'FAST2XY_DAT':(f_in.readlines(),'s'),
+                                             'temporal_struct':(e_data,'f'),
+                                             'gain_curve':(pz_data,'f'),
                                              }
-    # < read complimentary FEL data >
-    #wf_struct['history/parent/detail/misc']={
-    #                                         'temporal_struct':(e_data,'f'),
-    #                                         'gain_curve':(pz_data,'f'),
-    #                                         'fwhm_curve':(fwhm_data,'f'),
-    #                                         'power_xy':(p_data,'f')
-    #                                         }
+                                             #'fwhm_curve':(fwhm_data,'f') #<- not defined for long pulse data
     
     #store wavefront in hdf5 file
     fname0 = set_oname_2014(namg,namt,ifb,nzc)
@@ -543,7 +547,7 @@ def main():
     datapath='/data/S2E/data/';thepath ='/data/S2E/data/FELsource/'
     
     fel_data_path='/pnfs/desy.de/exfel/disk/XFEL/2013/SIM/FAST/2013-EXFEL-S1-5keV-14GeV-LongPulse/'
-    prop_dir=datapath+'/'+str(uuid.uuid4())
+    prop_dir=datapath+str(uuid.uuid4())
     mkdir_p(prop_dir)
     os.chdir(thepath)
 
@@ -590,12 +594,12 @@ else:
     in_fast2xydat='PPROC-FAST2XY_2013_LP.DAT';trd1=3.;nskip=8;nzc=25;jmax=2
     
     out_fast2xydat='PPROC-FAST2XY_2013.DAT'
-    #$datapath='/diskmnt/a/exflwgs03/lsamoylv/code/data';thepath = '/diskmnt/a/exflwgs03/lsamoylv/code/WPG-develop/samples/' 
+    #$datapath='/diskmnt/a/exflwgs03/lsamoylv/code/data/';thepath = '/diskmnt/a/exflwgs03/lsamoylv/code/WPG-develop/samples/' 
     #@
     datapath='/data/S2E/data/';thepath ='/data/S2E/data/FELsource/'
     
     fel_data_path='/pnfs/desy.de/exfel/disk/XFEL/2013/SIM/FAST/2013-EXFEL-S1-5keV-14GeV-LongPulse/'
-    prop_dir=datapath+'/'+str(uuid.uuid4())
+    prop_dir=datapath+str(uuid.uuid4())
     mkdir_p(prop_dir)
     os.chdir(thepath)
 
@@ -636,6 +640,7 @@ else:
 
 # <codecell>
 
+#ls 
 
 # <codecell>
 

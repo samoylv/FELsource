@@ -541,9 +541,9 @@ def main():
     #$datapath='/diskmnt/a/exflwgs03/lsamoylv/code/data';thepath = '/diskmnt/a/exflwgs03/lsamoylv/code/WPG-develop/samples/' 
     #@
     datapath='/data/S2E/data/';thepath ='/data/S2E/data/FELsource/'
-
+    
     fel_data_path='/pnfs/desy.de/exfel/disk/XFEL/2013/SIM/FAST/2013-EXFEL-S1-5keV-14GeV-LongPulse/'
-    prop_dir=datapath+str(uuid.uuid4())
+    prop_dir=datapath+'/'+str(uuid.uuid4())
     mkdir_p(prop_dir)
     os.chdir(thepath)
 
@@ -587,7 +587,7 @@ if __name__ == '__main__':
 else:
     # typical command line parameters:
     # fast2xy_new.py -i'PPROC-FAST2XY_2013_LP.DAT' --time-start=3. --skip-nslices=8 --zc-point-num=33 --jmax=2
-    in_fast2xydat='PPROC-FAST2XY_2013_LP.DAT';trd1=3.;nskip=8;nzc=18;jmax=2
+    in_fast2xydat='PPROC-FAST2XY_2013_LP.DAT';trd1=3.;nskip=8;nzc=25;jmax=2
     
     out_fast2xydat='PPROC-FAST2XY_2013.DAT'
     #$datapath='/diskmnt/a/exflwgs03/lsamoylv/code/data';thepath = '/diskmnt/a/exflwgs03/lsamoylv/code/WPG-develop/samples/' 
@@ -595,7 +595,7 @@ else:
     datapath='/data/S2E/data/';thepath ='/data/S2E/data/FELsource/'
     
     fel_data_path='/pnfs/desy.de/exfel/disk/XFEL/2013/SIM/FAST/2013-EXFEL-S1-5keV-14GeV-LongPulse/'
-    prop_dir=datapath+str(uuid.uuid4())
+    prop_dir=datapath+'/'+str(uuid.uuid4())
     mkdir_p(prop_dir)
     os.chdir(thepath)
 
@@ -624,11 +624,18 @@ else:
         os.system('rm '+tmp_dir+'/*.*')
     
         print 'The result hdf5 file:  '+out_fname+'.h5 will be copied to '
-        print prop_dir+'/'+ set_FELout_name('prop_in_',trd1)
+        print prop_dir+'/'+ set_FELout_name('prop_in',trd1)+'.h5'
         shutil.copy(os.path.join(work_dir,out_fname+'.h5'),
-                    os.path.join(prop_dir,set_FELout_name('prop_in_',trd1)+'.h5'))
+                    os.path.join(prop_dir,set_FELout_name('prop_in',trd1)+'.h5'))
         trd1=trd2
         os.chdir(thepath)
+
+# <codecell>
+
+#%tb
+
+# <codecell>
+
 
 # <codecell>
 

@@ -14,11 +14,14 @@ sys.path.insert(0,'/data/S2E/packages/WPG')
 #$sys.path.insert(0,'..')
 
 import shutil
+import uuid
 import numpy
 import h5py
 
 #Import base wavefront class
 from wpg import Wavefront
+
+doPrint = False
 
 # <codecell>
 
@@ -64,18 +67,18 @@ def set_oname_2014(namg,namt,ifb,nz):
 # <codecell>
 
 # set name of FEL output h5 file, i.e. add a suffix to a base name 
-# bname base name   
-# tmin is starting point of pulse chunk
-# return bname+'_'+str(tmin)+'fs'
-def set_FELout_name(bname,trd1):
-    strd1=str(int(numpy.floor(trd1)))
-    if (trd1+0.5) >(int(trd1) +1.):
-        strd1=str(int(numpy.ceil(trd1)))
-        fname = bname +'_'+strd1+'fs'
-    if int(trd1) < 10:
-        fname = bname+'_00'+strd1+'fs'
-    if  (int(trd1) >= 10) and (int(trd1) < 100):
-        fname = bname+'_0'+strd1+'fs'
+# bname - base name   
+# val - some value (e.g. a starting time point of pulse chunk)
+# return bname+'_'+str(val)
+def set_FELout_name(bname,val):
+    sval=str(int(numpy.floor(val)))
+    if (val+0.5) >(int(val) +1.):
+        sval=str(int(numpy.ceil(val)))
+        fname = bname + '_'+sval
+    if int(val) < 10:
+        fname = bname+'_00'+sval
+    if  (int(val) >= 10) and (int(val) < 100):
+        fname = bname+ '_0'+sval
     return fname
 
 # <codecell>
@@ -113,9 +116,9 @@ def create_numpy_array_from_rows(rows,slices=None):
 
     y = numpy.array(rows,dtype='float32').reshape((slice_count,N,N,2))
     
-    print 'y=rows.reshape((nSlices,nx,nx,2)',y.shape
+    if doPrint: print 'y=rows.reshape((nSlices,nx,nx,2)',y.shape
     y=numpy.swapaxes(y,0,2)
-    print 'return swapaxes(y,0,2)',y.shape
+    if doPrint: print 'return swapaxes(y,0,2)',y.shape
     return y
 
 # <codecell>
@@ -228,40 +231,17 @@ def phase_cut(wf, axis, polarization, x0=None, x1=None, M=0):
 
 # <codecell>
 
-def plot_int_xy(wf,xscale=1.,yscale=1.,xtitle='time [s]',ytitle='[a.u.]',capture=' '):
-    dx=(wf.params.Mesh.xMax - wf.params.Mesh.xMin)/(wf.params.Mesh.nx-1)
-    dy=(wf.params.Mesh.yMax - wf.params.Mesh.yMin)/(wf.params.Mesh.ny-1)
-    xaxis=linspace(wf.params.Mesh.sliceMin,wf.params.Mesh.sliceMax,wf.params.Mesh.nSlices)
-    # plot the pulse time structure /spectrum 
-    pylab.figure()    
-    pylab.plot(xaxis*xscale,wf.get_intensity().sum(axis=0).sum(axis=0)*dx*dy*1e-6*yscale,'o-')
-    pylab.xlabel(xtitle)
-    pylab.ylabel(ytitle)
-    pylab.title(capture)
-    pylab.grid(True)
-    
-def plot_pulse_intensity(wf,subtitle):
-    dx=(wf.params.Mesh.xMax - wf.params.Mesh.xMin)/(wf.params.Mesh.nx-1)
-    dy=(wf.params.Mesh.yMax - wf.params.Mesh.yMin)/(wf.params.Mesh.ny-1)
-    dt=(wf.params.Mesh.sliceMax-wf.params.Mesh.sliceMin)/(wf.params.Mesh.nSlices-1)
-    pylab.figure()
-    pylab.imshow(wf.get_intensity().sum(axis=-1)*dt*dx*dy*1e-6*1e6,extent=wf.get_limits())
-    pylab.colorbar()
-    pylab.title('pulse intensity [$\mu J$] '+subtitle)
-
-# <codecell>
-
 def update(in_fast2xydat='PPROC-FAST2XY_2013_LP.DAT',trd1=0.,trd2=None,
            nxy=None,nskip=None,ifb=None,nzc=None,namg=None):
     f_in = open(in_fast2xydat,'r')
     a = f_in.readlines()    
     strInputPar = numpy.empty(len(a), dtype=object)
     strComment  = numpy.empty(len(a), dtype=object)
-    print '==Beforehand=='
+    if doPrint: print '==Beforehand=='
     for idx in range(0,7): 
         strInputPar[idx] =  a[idx].split('#',1)[0]
         strComment [idx]  = a[idx].split('#',1)[1]
-        print strInputPar[idx].rstrip()+strComment[idx].rstrip()
+        if doPrint: print strInputPar[idx].rstrip()+strComment[idx].rstrip()
     f_in.close()
     strInputPar[0] = str(trd1)
     if trd2 is not None:
@@ -284,12 +264,13 @@ def update(in_fast2xydat='PPROC-FAST2XY_2013_LP.DAT',trd1=0.,trd2=None,
         strInputPar[6] = namg
     else:
         namg = strInputPar[6].strip()
-    print '==Afterwards=='
+    if doPrint: print '==Afterwards=='
     for idx in range(0,7): 
         a[idx] = strInputPar[idx].strip()+' #'+strComment[idx].rstrip()
 #    for idx in range(0,len(a)):
-    for idx in range(0,7):
-        print a[idx]
+    if doPrint: 
+        for idx in range(0,7):
+            print a[idx]
     aout=a[0:31]
     numpy.savetxt( in_fast2xydat,aout,fmt='%s')  
     return namg,ifb,nzc
@@ -405,10 +386,10 @@ def fill_wf_params(wf_struct,params,nrows):
     xMax =  xStep*(nx-1)/2
     slMin = slMin0 + (nStart-1)*slStep
     slMax = slMin0 + (nEnd - 1)*slStep
-    print 'wl [nm], Eph [keV]',wl*1e9,photonEnergy*1e-3
-    print 'nStart,nEnd: ',nStart,nEnd
-    print 'nSlices,slMin,slMax [fs]: ',nEnd,slMin*1e15,slMax*1e15
-    print 'nx,xMin,xMax [um]',nx,xMin*1e6,xMax*1e6  
+    if doPrint: print 'wl [nm], Eph [keV]',wl*1e9,photonEnergy*1e-3
+    if doPrint: print 'nStart,nEnd: ',nStart,nEnd
+    if doPrint: print 'nSlices,slMin,slMax [fs]: ',nEnd,slMin*1e15,slMax*1e15
+    if doPrint: print 'nx,xMin,xMax [um]',nx,xMin*1e6,xMax*1e6  
     RK1 = params[0][4]
     wf_struct['params']={
                          'photonEnergy':(photonEnergy,'f'),
@@ -437,7 +418,7 @@ def fill_wf_params(wf_struct,params,nrows):
                                  'zCoord':(0.0,'d')
                                  }
     #xStep*1e-3: |E|^2 in W/mm^2 but not W/m^2
-    return RK1/(xStep*1e-3)**2,nStart,nEnd
+    return RK1/(xStep*1e3)**2,nStart,nEnd
 
 # <codecell>
 
@@ -445,14 +426,14 @@ def add_wf_attributes(fname0):
     # use srwlib glossary to add attributes to wavefront datasets 
     in_fname   = fname0+'.h5'
     bare_fname = fname0+'_bare.h5'
-    print('Loading wavefront data from the file:     '+in_fname)
+    if doPrint: print('Loading wavefront data from the file:     '+in_fname)
     wf_struct=Wavefront()
     wf_struct.load_hdf5(in_fname)
     wfr = wf_struct._srwl_wf
     wf_struct = Wavefront(wfr)
-    print('Saving the wavefront data with attributes:'+bare_fname)
+    if doPrint: print('Saving the wavefront data with attributes:'+bare_fname)
     wf_struct.store_hdf5(bare_fname)
-    print('Replacing data with attributes from  '+bare_fname)
+    if doPrint: print('Replacing data with attributes from  '+bare_fname)
     with h5py.File(bare_fname) as h2:
         with h5py.File(in_fname) as h1:
             try:
@@ -466,18 +447,20 @@ def add_wf_attributes(fname0):
 def convert_fast2h5(fel_data_path,fast2xyexe,fast2xydat,namg,ifb,nzc):
     ifname=set_iname_2014(namg,ifb,nzc)+'.RES'
     fulltname=fel_data_path+ifname
-    print 'fulltname:',fulltname
-    print 'Create sym link:',os.system("ln -s "+fulltname+" fort.4")
+    if doPrint: print 'fulltname:',fulltname
+    if doPrint: print 'Create sym link:'
+    os.system("ln -s "+fulltname+" fort.4")
     outp=os.popen(fast2xyexe).read()
-    print 'Remove sym link:',os.system("rm fort.4")
-    print 'fast2xy.exe:\n',outp
+    if doPrint: print 'Remove sym link:'
+    os.system("rm fort.4")
+    if doPrint: print 'fast2xy.exe:\n',outp
 
     #loading data from text toe*.res file
     nharm=1 # for fundamental
-    namt = 'FXY'+str(nharm)+'_'   # part of FEL output ASCII file name 
-    print 'Reading text data from: '+ set_oname_2014(namg,namt,ifb,nzc)+'.RES ...'
+    namt = 'FXY'+str(nharm)+'_'   # part of fast2xy.exe output file name 
+    print 'Reading FEL data from: '+ set_oname_2014(namg,namt,ifb,nzc)+'.RES ...'
     params, rows=parse_toe_file(set_oname_2014(namg,namt,ifb,nzc)+'.RES')
-    print '...done'
+    if doPrint: print '...done'
 
     #wavefront structure based on glossary
     wf_struct={'version':(0.1,'f')}
@@ -506,7 +489,7 @@ def convert_fast2h5(fel_data_path,fast2xyexe,fast2xydat,namg,ifb,nzc):
     
     #store wavefront in hdf5 file
     fname0 = set_oname_2014(namg,namt,ifb,nzc)
-    print "Store wavefront in hdf5 file: "+fname0+'.h5'
+    if doPrint: print "Store wavefront in hdf5 file: "+fname0+'.h5'
     store_wavefront_hdf5(wf_struct,fname0+'.h5')
     add_wf_attributes(fname0)
     return fname0
@@ -517,6 +500,7 @@ def main():
     from optparse import OptionParser
     parser = OptionParser()
     parser.add_option("-i", "--input-parameter-file",dest="in_fast2xydat", help="Input fast2xy parameter file", )
+    parser.add_option("-j", "--jmax",                dest="jmax", help="how many output pulses should be provided (1 by default)", )
     parser.add_option("-t", "--time-start",          dest="trd1", help="Start time value for reading the pulse, fs")
     parser.add_option("-q", "--time-end",            dest="trd2", help="End time value for reading the pulse, fs")
     parser.add_option("-n", "--nxy",                 dest="nxy",  help="Number of xy nodes")
@@ -542,6 +526,11 @@ def main():
     else:
         nzc=int(float(options.nzc))
 
+    if not options.jmax:   # if jmax value not given
+        jmax=1 #default value
+    else:
+        jmax=int(float(options.jmax))
+
     if not options.namg: # if prefix is not given
         namg = 'SASE1_5keV_14GeV_LP_'
     else:
@@ -553,73 +542,95 @@ def main():
     #@
     thepath ='/data/S2E/data/FELsource/'
     fel_data_path='/pnfs/desy.de/exfel/disk/XFEL/2013/SIM/FAST/2013-EXFEL-S1-5keV-14GeV-LongPulse/'
+    prop_dir=thepath+str(uuid.uuid4())
+    mkdir_p(prop_dir)
     os.chdir(thepath)
 
-    namg,ifb,nzc = update(in_fast2xydat,trd1,trd2=trd1+9,nzc=nzc)
-    #print namg,ifb,nz
 
-    fast2xyexe='pproc-fast2xy-2013-v2-06-wo-fname.exe'
-    work_dir = os.path.join(thepath,namg+str(ifb)+'0'+str(nzc))
-    tmp_dir = work_dir+'/tmp'
+    for idx in range(0,jmax):
+        trd2=trd1+9
+        namg,ifb,nzc = update(in_fast2xydat,trd1,trd2=trd2,nzc=nzc,namg='SASE1_5keV_14GeV_LP_')
 
-    mkdir_p(work_dir)
-    print 'The result hdf5 file will be saved in \n'+ work_dir+'/'
-    mkdir_p(tmp_dir)
-    print 'All temporary files will be saved in \n'+ tmp_dir+'/'
-    shutil.copy(os.path.join(thepath,in_fast2xydat), tmp_dir+'/'+out_fast2xydat)
-    shutil.copy(os.path.join(thepath,fast2xyexe), tmp_dir+'/')
-
-    os.chdir(tmp_dir)
-    print 'trd1:',trd1
-    in_fname=convert_fast2h5(fel_data_path,fast2xyexe,out_fast2xydat,namg,ifb,nzc)
-    print 'trd1:',trd1
-    out_fname=set_FELout_name(in_fname,trd1)
-    print 'in_fname,out_fname:',in_fname,out_fname
-    os.system('chmod a+rw '+ tmp_dir+'/*.*')    
+        fast2xyexe='pproc-fast2xy-2013-v2-06-wo-fname.exe'
+        work_dir = os.path.join(thepath,namg+str(ifb)+'0'+str(nzc))
+        tmp_dir = work_dir+'/tmp'
     
-    shutil.copy(in_fname+'.h5', os.path.join(work_dir,out_fname+'.h5'))
-    os.system('rm '+tmp_dir+'/*.*')
-    os.chdir(thepath)
+        mkdir_p(work_dir)
+        if doPrint: print 'The result hdf5 file will be saved in \n'+ work_dir+'/'
+        mkdir_p(tmp_dir)
+        if doPrint: print 'All temporary files will be saved in \n'+ tmp_dir+'/'
+        shutil.copy(os.path.join(thepath,in_fast2xydat), tmp_dir+'/'+out_fast2xydat)
+        shutil.copy(os.path.join(thepath,fast2xyexe), tmp_dir+'/')
+    
+        os.chdir(tmp_dir)
+        in_fname=convert_fast2h5(fel_data_path,fast2xyexe,out_fast2xydat,namg,ifb,nzc)
+        out_fname=set_FELout_name(in_fname,trd1)
+        if doPrint: print 'in_fname,out_fname:',in_fname,out_fname
+        os.system('chmod a+rw '+ tmp_dir+'/*.*')    
+        
+        shutil.copy(in_fname+'.h5', os.path.join(work_dir,out_fname+'.h5'))
+        os.system('rm '+tmp_dir+'/*.*')
+    
+        print 'The result hdf5 file:  '+out_fname+'.h5 will be copied to '
+        print prop_dir+'/'+ set_FELout_name('prop_in_',trd1)
+        shutil.copy(os.path.join(work_dir,out_fname+'.h5'),
+                    os.path.join(prop_dir,set_FELout_name('prop_in_',trd1)+'.h5'))
+        trd1=trd2
+        os.chdir(thepath)
 
 # <codecell>
 
+#$if False:
 if __name__ == '__main__':
-        main()
+    main()
 else:
     # typical command line parameters:
-    # fast2xy_new.py -i'PPROC-FAST2XY_2013_LP.DAT' --time-start=3. --skip-nslices=8 --zc-point-num=33
-    in_fast2xydat='PPROC-FAST2XY_2013_LP.DAT';trd1=12.;nskip=8;nzc=33
+    # fast2xy_new.py -i'PPROC-FAST2XY_2013_LP.DAT' --time-start=3. --skip-nslices=8 --zc-point-num=33 --jmax=2
+    in_fast2xydat='PPROC-FAST2XY_2013_LP.DAT';trd1=3.;nskip=8;nzc=18;jmax=2
     
     out_fast2xydat='PPROC-FAST2XY_2013.DAT'
     #$thepath = '/diskmnt/a/exflwgs03/lsamoylv/code/WPG-develop/samples/' 
     #@
     thepath ='/data/S2E/data/FELsource/'
     fel_data_path='/pnfs/desy.de/exfel/disk/XFEL/2013/SIM/FAST/2013-EXFEL-S1-5keV-14GeV-LongPulse/'
+    prop_dir=thepath+str(uuid.uuid4())
+    mkdir_p(prop_dir)
     os.chdir(thepath)
 
-    namg,ifb,nzc = update(in_fast2xydat,trd1,trd2=trd1+9,nzc=nzc,namg='SASE1_5keV_14GeV_LP_')
-    #print namg,ifb,nz
+    for idx in range(0,jmax):
+        trd2=trd1+9
+        namg,ifb,nzc = update(in_fast2xydat,trd1,trd2=trd2,nzc=nzc,namg='SASE1_5keV_14GeV_LP_')
 
-    fast2xyexe='pproc-fast2xy-2013-v2-06-wo-fname.exe'
-    work_dir = os.path.join(thepath,namg+str(ifb)+'0'+str(nzc))
-    tmp_dir = work_dir+'/tmp'
-
-    mkdir_p(work_dir)
-    print 'The result hdf5 file will be saved in \n'+ work_dir+'/'
-    mkdir_p(tmp_dir)
-    print 'All temporary files will be saved in \n'+ tmp_dir+'/'
-    shutil.copy(os.path.join(thepath,in_fast2xydat), tmp_dir+'/'+out_fast2xydat)
-    shutil.copy(os.path.join(thepath,fast2xyexe), tmp_dir+'/')
-
-    os.chdir(tmp_dir)
-    in_fname=convert_fast2h5(fel_data_path,fast2xyexe,out_fast2xydat,namg,ifb,nzc)
-    out_fname=set_FELout_name(in_fname,trd1)
-    print 'in_fname,out_fname:',in_fname,out_fname
-    os.system('chmod a+rw '+ tmp_dir+'/*.*')    
+        fast2xyexe='pproc-fast2xy-2013-v2-06-wo-fname.exe'
+        work_dir = os.path.join(thepath,namg+str(ifb)+'0'+str(nzc))
+        tmp_dir = work_dir+'/tmp'
     
-    shutil.copy(in_fname+'.h5', os.path.join(work_dir,out_fname+'.h5'))
-    os.system('rm '+tmp_dir+'/*.*')
-    os.chdir(thepath)
+        mkdir_p(work_dir)
+        if doPrint: print 'The result hdf5 file will be saved in \n'+ work_dir+'/'
+        mkdir_p(tmp_dir)
+        if doPrint: print 'All temporary files will be saved in \n'+ tmp_dir+'/'
+        shutil.copy(os.path.join(thepath,in_fast2xydat), tmp_dir+'/'+out_fast2xydat)
+        shutil.copy(os.path.join(thepath,fast2xyexe), tmp_dir+'/')
+    
+        os.chdir(tmp_dir)
+        in_fname=convert_fast2h5(fel_data_path,fast2xyexe,out_fast2xydat,namg,ifb,nzc)
+        out_fname=set_FELout_name(in_fname,trd1)
+        if doPrint: print 'in_fname,out_fname:',in_fname,out_fname
+        os.system('chmod a+rw '+ tmp_dir+'/*.*')    
+        
+        shutil.copy(in_fname+'.h5', os.path.join(work_dir,out_fname+'.h5'))
+        os.system('rm '+tmp_dir+'/*.*')
+    
+        print 'The result hdf5 file:  '+out_fname+'.h5 will be copied to '
+        print prop_dir+'/'+ set_FELout_name('prop_in_',trd1)
+        shutil.copy(os.path.join(work_dir,out_fname+'.h5'),
+                    os.path.join(prop_dir,set_FELout_name('prop_in_',trd1)+'.h5'))
+        trd1=trd2
+        os.chdir(thepath)
+
+# <codecell>
+
+#%tb
 
 # <codecell>
 

@@ -538,11 +538,12 @@ def main():
 
     #copy-paste from else block of the cell below
     out_fast2xydat='PPROC-FAST2XY_2013.DAT'
-    #$thepath = '/diskmnt/a/exflwgs03/lsamoylv/code/WPG-develop/samples/' 
+    #$datapath='/diskmnt/a/exflwgs03/lsamoylv/code/data';thepath = '/diskmnt/a/exflwgs03/lsamoylv/code/WPG-develop/samples/' 
     #@
-    thepath ='/data/S2E/data/FELsource/'
+    datapath='/data/S2E/data/';thepath ='/data/S2E/data/FELsource/'
+
     fel_data_path='/pnfs/desy.de/exfel/disk/XFEL/2013/SIM/FAST/2013-EXFEL-S1-5keV-14GeV-LongPulse/'
-    prop_dir=thepath+str(uuid.uuid4())
+    prop_dir=datapath+str(uuid.uuid4())
     mkdir_p(prop_dir)
     os.chdir(thepath)
 
@@ -589,11 +590,12 @@ else:
     in_fast2xydat='PPROC-FAST2XY_2013_LP.DAT';trd1=3.;nskip=8;nzc=18;jmax=2
     
     out_fast2xydat='PPROC-FAST2XY_2013.DAT'
-    #$thepath = '/diskmnt/a/exflwgs03/lsamoylv/code/WPG-develop/samples/' 
+    #$datapath='/diskmnt/a/exflwgs03/lsamoylv/code/data';thepath = '/diskmnt/a/exflwgs03/lsamoylv/code/WPG-develop/samples/' 
     #@
-    thepath ='/data/S2E/data/FELsource/'
+    datapath='/data/S2E/data/';thepath ='/data/S2E/data/FELsource/'
+    
     fel_data_path='/pnfs/desy.de/exfel/disk/XFEL/2013/SIM/FAST/2013-EXFEL-S1-5keV-14GeV-LongPulse/'
-    prop_dir=thepath+str(uuid.uuid4())
+    prop_dir=datapath+str(uuid.uuid4())
     mkdir_p(prop_dir)
     os.chdir(thepath)
 
@@ -630,7 +632,7 @@ else:
 
 # <codecell>
 
-#%tb
+%tb
 
 # <codecell>
 

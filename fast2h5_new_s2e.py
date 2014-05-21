@@ -486,7 +486,7 @@ def convert_fast2h5(fel_data_path,fast2xyexe,fast2xydat,namg,ifb,nzc):
     fill_wf_history_detail(wf_struct)
     f_in = open(fast2xydat,'r')
     
-    e_data =    numpy.loadtxt(os.path.join(tmp_dir,set_oname_2014(namg,'E'+str(1),ifb,nzc)+'.RES'))
+    e_data =    numpy.loadtxt(set_oname_2014(namg,'E'+str(1),ifb,nzc)+'.RES')
     #fwhm_data not defined 
     #fwhm_data = numpy.loadtxt(os.path.join(tmp_dir,set_oname_2014(namg,'FWHM'+str(nharm)+'_',ifb,0)+'0.RES'))
     #&pz_data_file = set_oname_2014(namg,'PZ'+str(nharm)+'_',ifb,0)+'0.RES'

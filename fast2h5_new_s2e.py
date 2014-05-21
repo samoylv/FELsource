@@ -3,6 +3,15 @@
 
 # <codecell>
 
+# Contact L.Samoylova <liubov.samoylova@xfel.eu>, A.Buzmakov <buzmakov@gmail.com>
+# SPB S2E simulation project, European XFEL Hamburg <www.xfel.eu>
+# May 2014
+# Wave optics software is based on 
+# SRW core library <https://github.com/ochubar/SRW>, and 
+# WPG framework <https://github.com/samoylv/WPG>
+
+# <codecell>
+
 #$%pylab inline
 #Importing necessary modules:
 import sys
@@ -503,6 +512,7 @@ def convert_fast2h5(fel_data_path,fast2xyexe,fast2xydat,namg,ifb,nzc):
 def main():
     from optparse import OptionParser
     parser = OptionParser()
+    parser.add_option("-o", "--output-dir",          dest="out_dir", help="Output directory", )
     parser.add_option("-i", "--input-parameter-file",dest="in_fast2xydat", help="Input fast2xy parameter file", )
     parser.add_option("-j", "--jmax",                dest="jmax", help="how many output pulses should be provided (1 by default)", )
     parser.add_option("-t", "--time-start",          dest="trd1", help="Start time value for reading the pulse, fs")
@@ -547,8 +557,7 @@ def main():
     datapath='/data/S2E/data/';thepath ='/data/S2E/data/FELsource/'
     
     fel_data_path='/pnfs/desy.de/exfel/disk/XFEL/2013/SIM/FAST/2013-EXFEL-S1-5keV-14GeV-LongPulse/'
-    prop_dir=datapath+str(uuid.uuid4())
-    mkdir_p(prop_dir)
+    mkdir_p(out_dir)
     os.chdir(thepath)
 
 
@@ -577,9 +586,9 @@ def main():
         os.system('rm '+tmp_dir+'/*.*')
     
         print 'The result hdf5 file:  '+out_fname+'.h5 will be copied to '
-        print prop_dir+'/'+ set_FELout_name('prop_in_',trd1)
+        print out_dir+'/'+ set_FELout_name('prop_in_',trd1)
         shutil.copy(os.path.join(work_dir,out_fname+'.h5'),
-                    os.path.join(prop_dir,set_FELout_name('prop_in_',trd1)+'.h5'))
+                    os.path.join(out_dir,set_FELout_name('prop_in_',trd1)+'.h5'))
         trd1=trd2
         os.chdir(thepath)
 
@@ -591,16 +600,17 @@ if __name__ == '__main__':
 else:
     # typical command line parameters:
     # fast2xy_new.py -i'PPROC-FAST2XY_2013_LP.DAT' --time-start=3. --skip-nslices=8 --zc-point-num=33 --jmax=2
-    in_fast2xydat='PPROC-FAST2XY_2013_LP.DAT';trd1=3.;nskip=8;nzc=25;jmax=2
+    in_fast2xydat='PPROC-FAST2XY_2013_LP.DAT';trd1=3.;nskip=8;nzc=42;jmax=2
     
     out_fast2xydat='PPROC-FAST2XY_2013.DAT'
-    #$datapath='/diskmnt/a/exflwgs03/lsamoylv/code/data/';thepath = '/diskmnt/a/exflwgs03/lsamoylv/code/WPG-develop/samples/' 
-    #@
-    datapath='/data/S2E/data/';thepath ='/data/S2E/data/FELsource/'
+    #$
+    datapath='/diskmnt/a/exflwgs03/lsamoylv/code/data/';thepath = '/diskmnt/a/exflwgs03/lsamoylv/code/WPG-develop/samples/' 
+    #@datapath='/data/S2E/data/';thepath ='/data/S2E/data/FELsource/'
     
     fel_data_path='/pnfs/desy.de/exfel/disk/XFEL/2013/SIM/FAST/2013-EXFEL-S1-5keV-14GeV-LongPulse/'
-    prop_dir=datapath+str(uuid.uuid4())
-    mkdir_p(prop_dir)
+    #$
+    out_dir='/diskmnt/a/exflwgs03/lsamoylv/code/sim_data/FELsource'
+    mkdir_p(out_dir)
     os.chdir(thepath)
 
     for idx in range(0,jmax):
@@ -628,9 +638,9 @@ else:
         os.system('rm '+tmp_dir+'/*.*')
     
         print 'The result hdf5 file:  '+out_fname+'.h5 will be copied to '
-        print prop_dir+'/'+ set_FELout_name('prop_in',trd1)+'.h5'
+        print out_dir+'/'+ set_FELout_name('prop_in',trd1)+'.h5'
         shutil.copy(os.path.join(work_dir,out_fname+'.h5'),
-                    os.path.join(prop_dir,set_FELout_name('prop_in',trd1)+'.h5'))
+                    os.path.join(out_dir,set_FELout_name('prop_in',trd1)+'.h5'))
         trd1=trd2
         os.chdir(thepath)
 

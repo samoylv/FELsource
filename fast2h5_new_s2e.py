@@ -12,16 +12,15 @@
 
 # <codecell>
 
-#$
-%pylab inline
+#$%pylab inline
 #Importing necessary modules:
 import sys
 import os
 import errno
 
-#@sys.path.insert(0,'/data/S2E/packages/WPG')
-#$
-sys.path.insert(0,'..')
+#@
+sys.path.insert(0,'/data/S2E/packages/WPG')
+#$sys.path.insert(0,'..')
 
 import shutil
 import uuid
@@ -600,10 +599,9 @@ def main():
 
 # <codecell>
 
-#$
-if False:
-    if __name__ == '__main__':
-        main()
+#$if False:
+if __name__ == '__main__':
+    main()
 else:
     # typical command line parameters:
     # fast2xy_new.py -i'PPROC-FAST2XY_2013_LP.DAT' --time-start=3. --skip-nslices=8 --zc-point-num=33 --jmax=2

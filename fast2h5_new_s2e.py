@@ -12,15 +12,16 @@
 
 # <codecell>
 
-#$%pylab inline
+#$
+%pylab inline
 #Importing necessary modules:
 import sys
 import os
 import errno
 
-#@
-sys.path.insert(0,'/data/S2E/packages/WPG')
-#$sys.path.insert(0,'..')
+#@sys.path.insert(0,'/data/S2E/packages/WPG')
+#$
+sys.path.insert(0,'..')
 
 import shutil
 import uuid
@@ -526,12 +527,17 @@ def main():
     (options, args) = parser.parse_args()
     
     if not options.in_fast2xydat:   # if filename is not given
-        parser.error('Input parameter filename not given')
+        parser.error('Input parameter filename is not specified')
     else:
         in_fast2xydat=options.in_fast2xydat
    
+    if not options.out_dir:   # if time value not given
+        parser.error('Output directory is not specified')
+    else:
+        out_dir=options.out_dir
+
     if not options.trd1:   # if time value not given
-        parser.error('Start time value not given')
+        parser.error('Start time value is not specified')
     else:
         trd1=float(options.trd1)
 
@@ -594,9 +600,10 @@ def main():
 
 # <codecell>
 
-#$if False:
-if __name__ == '__main__':
-    main()
+#$
+if False:
+    if __name__ == '__main__':
+        main()
 else:
     # typical command line parameters:
     # fast2xy_new.py -i'PPROC-FAST2XY_2013_LP.DAT' --time-start=3. --skip-nslices=8 --zc-point-num=33 --jmax=2

@@ -30,6 +30,8 @@ import h5py
 #Import base wavefront class
 from wpg import Wavefront
 
+fel_data_path='/pnfs/desy.de/exfel/disk/XFEL/2013/SIM/FAST/2013-EXFEL-S1-5keV-14GeV-LongPulse/'
+
 doPrint = False
 
 # <codecell>
@@ -489,10 +491,9 @@ def convert_fast2h5(fel_data_path,fast2xyexe,fast2xydat,namg,ifb,nzc):
     e_data =    numpy.loadtxt(set_oname_2014(namg,'E'+str(1),ifb,nzc)+'.RES')
     #fwhm_data not defined 
     #fwhm_data = numpy.loadtxt(os.path.join(tmp_dir,set_oname_2014(namg,'FWHM'+str(nharm)+'_',ifb,0)+'0.RES'))
-    #&pz_data_file = set_oname_2014(namg,'PZ'+str(nharm)+'_',ifb,0)+'0.RES'
-    #&pz_data = numpy.loadtxt(fel_data_path+pz_data_file)
-    pz_data_file = 'PZ'+str(ifb)+'.RES'
-    pz_data = numpy.loadtxt(thepath+pz_data_file)
+    pz_data_file = 'PZ'+str(ifb)+'.RES
+    #@@pz_data_file = set_oname_2014(namg,'PZ'+str(nharm)+'_',ifb,0)+'0.RES'
+    pz_data = numpy.loadtxt(fel_data_path+pz_data_file)
     wf_struct['history/parent/detail/misc']={
                                              'FAST2XY_DAT':(f_in.readlines(),'s'),
                                              'temporal_struct':(e_data,'f'),
@@ -561,7 +562,6 @@ def main():
     #@
     datapath='/data/S2E/data/';thepath ='/data/S2E/data/FELsource/'
     
-    fel_data_path='/pnfs/desy.de/exfel/disk/XFEL/2013/SIM/FAST/2013-EXFEL-S1-5keV-14GeV-LongPulse/'
     mkdir_p(out_dir)
     os.chdir(thepath)
 

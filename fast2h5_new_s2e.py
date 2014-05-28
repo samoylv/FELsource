@@ -37,9 +37,9 @@ nharm = 1
 
 doPrint = False     # switch on/off debug printing
 # switch on/off copying results into FELsource/prop_in_XXX.h5 
-#@doCopyRes = True
-#$
-doCopyRes = False  #switch on for S2E  
+#S2E
+doCopyRes = True    
+#!S2EdoCopyRes = False
 
 # <codecell>
 

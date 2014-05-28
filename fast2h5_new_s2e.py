@@ -12,15 +12,15 @@
 
 # <codecell>
 
-#$%pylab inline
+#!S2E%pylab inline
 #Importing necessary modules:
 import sys
 import os
 import errno
 
-#@
+#S2E
 sys.path.insert(0,'/data/S2E/packages/WPG')
-#$sys.path.insert(0,'..')
+#!S2Esys.path.insert(0,'../..')
 
 import shutil
 import uuid
@@ -30,9 +30,16 @@ import h5py
 #Import base wavefront class
 from wpg import Wavefront
 
+#LP
+isLP = True
 fel_data_path='/pnfs/desy.de/exfel/disk/XFEL/2013/SIM/FAST/2013-EXFEL-S1-5keV-14GeV-LongPulse/'
+nharm = 1
 
-doPrint = False
+doPrint = False     # switch on/off debug printing
+# switch on/off copying results into FELsource/prop_in_XXX.h5 
+#@doCopyRes = True
+#$
+doCopyRes = False  #switch on for S2E  
 
 # <codecell>
 
@@ -50,9 +57,9 @@ def mkdir_p(path):
 
 # <codecell>
 
-def set_pzname_2014(namg,ifb,nz):
+def set_pzname(namg,ifb):
     # suppose that undulator position identifier, nz, has 2 digits
-    name = namg+'PZ1_000'+str(ifb)+'000'
+    name = namg+'PZ1_'+str(ifb)+'000'
     return name
 
 # <codecell>
@@ -351,7 +358,7 @@ def fill_wf_history_detail(wf_struct):
         PZh == Energy in the radiation pulse versus undulator length (gain curve)
         col[0] Sequential number of output point along undulator
         col[1] Position along undulator [cm]
-        col[2] Total energy in the radiation pulse for frequency harmonic h [J]
+        col[2] Averaged power of the radiation pulse for frequency harmonic h [W]
         col[3] Energy loss by electrons [J]
         col[4:4+2*n] 
         -n
@@ -469,7 +476,7 @@ def convert_fast2h5(fel_data_path,fast2xyexe,fast2xydat,namg,ifb,nzc):
     #loading data from text toe*.res file
     nharm=1 # for fundamental
     namt = 'FXY'+str(nharm)+'_'   # part of fast2xy.exe output file name 
-    print 'Reading FEL data from: '+ set_oname_2014(namg,namt,ifb,nzc)+'.RES ...'
+    print 'Reading FEL data from:'+ set_oname_2014(namg,namt,ifb,nzc)+'.RES ...'
     params, rows=parse_toe_file(set_oname_2014(namg,namt,ifb,nzc)+'.RES')
     if doPrint: print '...done'
 
@@ -488,15 +495,20 @@ def convert_fast2h5(fel_data_path,fast2xyexe,fast2xydat,namg,ifb,nzc):
     fill_wf_history_detail(wf_struct)
     f_in = open(fast2xydat,'r')
     
-    e_data =    numpy.loadtxt(set_oname_2014(namg,'E'+str(1),ifb,nzc)+'.RES')
-    #fwhm_data not defined 
-    #fwhm_data = numpy.loadtxt(os.path.join(tmp_dir,set_oname_2014(namg,'FWHM'+str(nharm)+'_',ifb,0)+'0.RES'))
-    pz_data_file = 'PZ'+str(ifb)+'.RES'
-    #@pz_data_file = set_oname_2014(namg,'PZ'+str(nharm)+'_',ifb,0)+'0.RES'
+    e_data =    numpy.loadtxt(set_oname_2014(namg,'E'+str(nharm),ifb,nzc)+'.RES')
+    ff_data = numpy.loadtxt(fel_data_path+set_oname_2014(namg,'F'+str(nharm)+'_',ifb,nzc)+'.RES')
+    nf_data = numpy.loadtxt(fel_data_path+set_oname_2014(namg,'N'+str(nharm)+'_',ifb,nzc)+'.RES')
+    if not isLP:
+        #for LP fwhm_data not defined 
+        fwhm_data = numpy.loadtxt(os.path.join(tmp_dir,set_oname_2014(namg,'FWHM'+str(nharm)+'_',ifb,0)+'0.RES'))
+    pz_data_file = set_pzname(namg,ifb)+'.RES'
+    #set_oname_2014(namg,'PZ'+str(nharm)+'_',ifb,0)+'0.RES'
     pz_data = numpy.loadtxt(fel_data_path+pz_data_file)
     wf_struct['history/parent/detail/misc']={
                                              'FAST2XY_DAT':(f_in.readlines(),'s'),
                                              'temporal_struct':(e_data,'f'),
+                                             'spot_size':(nf_data,'f'),
+                                             'angular_distribution':(ff_data,'f'),
                                              'gain_curve':(pz_data,'f'),
                                              }
                                              #'fwhm_curve':(fwhm_data,'f') #<- not defined for long pulse data
@@ -511,6 +523,8 @@ def convert_fast2h5(fel_data_path,fast2xyexe,fast2xydat,namg,ifb,nzc):
 # <codecell>
 
 def main():
+    # typical command line parameters:
+    # fast2xy_new.py -i'PPROC-FAST2XY_2013_LP.DAT' --time-start=3. --skip-nslices=8 --zc-point-num=33 --jmax=2
     from optparse import OptionParser
     parser = OptionParser()
     parser.add_option("-o", "--output-dir",          dest="out_dir", help="Output directory", )
@@ -558,9 +572,9 @@ def main():
 
     #copy-paste from else block of the cell below
     out_fast2xydat='PPROC-FAST2XY_2013.DAT'
-    #$datapath='/diskmnt/a/exflwgs03/lsamoylv/code/data';thepath = '/diskmnt/a/exflwgs03/lsamoylv/code/WPG-develop/samples/' 
+    #!S2Ethepath = '/diskmnt/a/exflwgs03/lsamoylv/code/WPG-develop/samples/' 
     #@
-    datapath='/data/S2E/data/';thepath ='/data/S2E/data/FELsource/'
+    thepath ='/data/S2E/data/FELsource/'
     
     mkdir_p(out_dir)
     os.chdir(thepath)
@@ -590,30 +604,33 @@ def main():
         shutil.copy(in_fname+'.h5', os.path.join(work_dir,out_fname+'.h5'))
         os.system('rm '+tmp_dir+'/*.*')
     
-        print 'The result hdf5 file:  '+out_fname+'.h5 will be copied to '
-        print out_dir+'/'+ set_FELout_name('prop_in_',trd1)
-        shutil.copy(os.path.join(work_dir,out_fname+'.h5'),
-                    os.path.join(out_dir,set_FELout_name('prop_in_',trd1)+'.h5'))
+        if doCopyRes:
+            print 'The result hdf5 file  '+out_fname+'.h5 will be copied to '
+            print out_dir+'/'+ set_FELout_name('prop_in',trd1)+'.h5'
+            shutil.copy(os.path.join(work_dir,out_fname+'.h5'),
+                        os.path.join(out_dir,set_FELout_name('prop_in',trd1)+'.h5'))
+        else:
+            print '... done'
         trd1=trd2
         os.chdir(thepath)
 
 # <codecell>
 
-#$if False:
+#S2Eif False:
 if __name__ == '__main__':
     main()
 else:
     # typical command line parameters:
     # fast2xy_new.py -i'PPROC-FAST2XY_2013_LP.DAT' --time-start=3. --skip-nslices=8 --zc-point-num=33 --jmax=2
-    in_fast2xydat='PPROC-FAST2XY_2013_LP.DAT';trd1=3.;nskip=8;nzc=42;jmax=2
+    in_fast2xydat='PPROC-FAST2XY_2013_LP.DAT';trd1=3.;nskip=8;nzc=15;jmax=2
     
     out_fast2xydat='PPROC-FAST2XY_2013.DAT'
-    #$
-    datapath='/diskmnt/a/exflwgs03/lsamoylv/code/data/';thepath = '/diskmnt/a/exflwgs03/lsamoylv/code/WPG-develop/samples/' 
-    #@datapath='/data/S2E/data/';thepath ='/data/S2E/data/FELsource/'
+    #!S2E
+    thepath = '/diskmnt/a/exflwgs03/lsamoylv/code/WPG-develop/samples/bp140523/' 
+    #S2Ethepath ='/data/S2E/data/FELsource/'
     
     fel_data_path='/pnfs/desy.de/exfel/disk/XFEL/2013/SIM/FAST/2013-EXFEL-S1-5keV-14GeV-LongPulse/'
-    #$
+    #!S2E
     out_dir='/diskmnt/a/exflwgs03/lsamoylv/code/sim_data/FELsource'
     mkdir_p(out_dir)
     os.chdir(thepath)
@@ -642,10 +659,13 @@ else:
         shutil.copy(in_fname+'.h5', os.path.join(work_dir,out_fname+'.h5'))
         os.system('rm '+tmp_dir+'/*.*')
     
-        print 'The result hdf5 file:  '+out_fname+'.h5 will be copied to '
-        print out_dir+'/'+ set_FELout_name('prop_in',trd1)+'.h5'
-        shutil.copy(os.path.join(work_dir,out_fname+'.h5'),
-                    os.path.join(out_dir,set_FELout_name('prop_in',trd1)+'.h5'))
+        if doCopyRes:
+            print 'The result hdf5 file  '+out_fname+'.h5 will be copied to '
+            print out_dir+'/'+ set_FELout_name('prop_in',trd1)+'.h5'
+            shutil.copy(os.path.join(work_dir,out_fname+'.h5'),
+                        os.path.join(out_dir,set_FELout_name('prop_in',trd1)+'.h5'))
+        else:
+            print '... done'
         trd1=trd2
         os.chdir(thepath)
 
@@ -656,6 +676,10 @@ else:
 # <codecell>
 
 #ls 
+
+# <codecell>
+
+#ff_data = numpy.loadtxt(fel_data_path+set_oname_2014(namg,'F'+str(nharm)+'_',ifb,nzc)+'.RES')
 
 # <codecell>
 

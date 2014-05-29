@@ -528,7 +528,7 @@ def main():
     from optparse import OptionParser
     parser = OptionParser()
     parser.add_option("-o", "--output-dir",          dest="out_dir", help="Output directory", )
-    parser.add_option("-f", "--file_id",             dest="f_id",     help="ID of the first of output files: FELsource_out_<ID+{0..JMAX-1}>", )
+    parser.add_option("-f", "--file-id",             dest="f_id",     help="ID of the first of output files: FELsource_out_<ID+{0..JMAX-1}>", )
     parser.add_option("-i", "--input-parameter-file",dest="in_fast2xydat", help="Input fast2xy parameter file", )
     parser.add_option("-j", "--jmax",                dest="jmax", help="how many output pulses should be provided (1 by default)", )
     parser.add_option("-t", "--time-start",          dest="trd1", help="Start time value for reading the pulse, fs")

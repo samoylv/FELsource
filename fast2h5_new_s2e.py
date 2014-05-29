@@ -612,12 +612,13 @@ def main():
         shutil.copy(in_fname+'.h5', os.path.join(work_dir,out_fname+'.h5'))
         os.system('rm '+tmp_dir+'/*.*')
     
-        if doCopyRes:
+         if doCopyRes:
             print 'The result hdf5 file  '+out_fname+'.h5 will be copied to '
-            print out_dir+'/'+ set_FELout_name('prop_in',trd1)+'.h5'
+            print out_dir+'/'+ prop_in_fname+'.h5'
             shutil.copy(os.path.join(work_dir,out_fname+'.h5'),
-                        os.path.join(out_dir,set_FELout_name('prop_in',trd1)+'.h5'))
+                        os.path.join(out_dir,prop_in_fname+'.h5'))
         else:
+            print out_fname, prop_in_fname
             print '... done'
         trd1=trd2
         os.chdir(thepath)

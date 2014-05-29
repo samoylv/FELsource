@@ -528,6 +528,7 @@ def main():
     from optparse import OptionParser
     parser = OptionParser()
     parser.add_option("-o", "--output-dir",          dest="out_dir", help="Output directory", )
+    parser.add_option("-f", "--file_id",             dest="f_id",     help="ID of the first of output files: FELsource_out_<ID+{0..JMAX-1}>", )
     parser.add_option("-i", "--input-parameter-file",dest="in_fast2xydat", help="Input fast2xy parameter file", )
     parser.add_option("-j", "--jmax",                dest="jmax", help="how many output pulses should be provided (1 by default)", )
     parser.add_option("-t", "--time-start",          dest="trd1", help="Start time value for reading the pulse, fs")
@@ -545,10 +546,15 @@ def main():
     else:
         in_fast2xydat=options.in_fast2xydat
    
-    if not options.out_dir:   # if time value not given
+    if not options.out_dir:   # if output directory not given
         parser.error('Output directory is not specified')
     else:
         out_dir=options.out_dir
+
+    if not options.f_id:   # if time value not given
+        f_id = 1 #default value
+    else:
+        f_id=options.f_id
 
     if not options.trd1:   # if time value not given
         parser.error('Start time value is not specified')
@@ -598,7 +604,9 @@ def main():
         os.chdir(tmp_dir)
         in_fname=convert_fast2h5(fel_data_path,fast2xyexe,out_fast2xydat,namg,ifb,nzc)
         out_fname=set_FELout_name(in_fname,trd1)
-        if doPrint: print 'in_fname,out_fname:',in_fname,out_fname
+        prop_in_fname = 'FELsource_out_'+str(f_id+idx).zfill(6)
+        
+        if doPrint: print 'in_fname,out_fname,prop_in_fname:',in_fname,out_fname,prop_in_fname
         os.system('chmod a+rw '+ tmp_dir+'/*.*')    
         
         shutil.copy(in_fname+'.h5', os.path.join(work_dir,out_fname+'.h5'))
@@ -613,7 +621,6 @@ def main():
             print '... done'
         trd1=trd2
         os.chdir(thepath)
-
 # <codecell>
 
 #S2Eif False:
@@ -622,7 +629,7 @@ if __name__ == '__main__':
 else:
     # typical command line parameters:
     # fast2xy_new.py -i'PPROC-FAST2XY_2013_LP.DAT' --time-start=3. --skip-nslices=8 --zc-point-num=33 --jmax=2
-    in_fast2xydat='PPROC-FAST2XY_2013_LP.DAT';trd1=3.;nskip=8;nzc=15;jmax=2
+    in_fast2xydat='PPROC-FAST2XY_2013_LP.DAT';f_id=2;trd1=3.;nskip=8;nzc=25;jmax=2
     
     out_fast2xydat='PPROC-FAST2XY_2013.DAT'
     #!S2E
@@ -653,7 +660,9 @@ else:
         os.chdir(tmp_dir)
         in_fname=convert_fast2h5(fel_data_path,fast2xyexe,out_fast2xydat,namg,ifb,nzc)
         out_fname=set_FELout_name(in_fname,trd1)
-        if doPrint: print 'in_fname,out_fname:',in_fname,out_fname
+        prop_in_fname = 'FELsource_out_'+str(f_id+idx).zfill(6)
+        
+        if doPrint: print 'in_fname,out_fname,prop_in_fname:',in_fname,out_fname,prop_in_fname
         os.system('chmod a+rw '+ tmp_dir+'/*.*')    
         
         shutil.copy(in_fname+'.h5', os.path.join(work_dir,out_fname+'.h5'))
@@ -661,10 +670,12 @@ else:
     
         if doCopyRes:
             print 'The result hdf5 file  '+out_fname+'.h5 will be copied to '
-            print out_dir+'/'+ set_FELout_name('prop_in',trd1)+'.h5'
+            #print out_dir+'/'+ set_FELout_name('prop_in',trd1)+'.h5'
+            print out_dir+'/'+ prop_in_fname+'.h5'
             shutil.copy(os.path.join(work_dir,out_fname+'.h5'),
-                        os.path.join(out_dir,set_FELout_name('prop_in',trd1)+'.h5'))
+                        os.path.join(out_dir,prop_in_fname+'.h5'))
         else:
+            print out_fname, prop_in_fname
             print '... done'
         trd1=trd2
         os.chdir(thepath)

@@ -554,7 +554,7 @@ def main():
     if not options.f_id:   # if time value not given
         f_id = 1 #default value
     else:
-        f_id=options.f_id
+        f_id=int(float(options.f_id))
 
     if not options.trd1:   # if time value not given
         parser.error('Start time value is not specified')

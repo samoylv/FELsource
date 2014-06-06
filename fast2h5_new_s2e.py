@@ -604,7 +604,7 @@ def main():
         os.chdir(tmp_dir)
         in_fname=convert_fast2h5(fel_data_path,fast2xyexe,out_fast2xydat,namg,ifb,nzc)
         out_fname=set_FELout_name(in_fname,trd1)
-        prop_in_fname = 'FELsource_out_'+str(f_id+idx).zfill(7)
+        prop_in_fname = 'FELsource_out_'+str(f_id+idx).zfill(6)
         
         if doPrint: print 'in_fname,out_fname,prop_in_fname:',in_fname,out_fname,prop_in_fname
         os.system('chmod a+rw '+ tmp_dir+'/*.*')    

@@ -25,7 +25,7 @@ import os
 import errno
 
 if not isIpynb:
-    S2Esys.path.insert(0,'/data/S2E/packages/WPG')
+    sys.path.insert(0,'/data/S2E/packages/WPG')
 else:
     sys.path.insert(0,'../..')
 

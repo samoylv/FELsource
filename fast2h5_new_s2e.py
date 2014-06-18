@@ -571,12 +571,7 @@ def main():
     parser.add_option("-p", "--prefix",              dest="namg", help="Prefix of FEL data files")
 
     (options, args) = parser.parse_args()
-    
-    if not options.in_fast2xydat:   # if filename is not given
-        parser.error('Input parameter filename is not specified')
-    else:
-        in_fast2xydat=options.in_fast2xydat
-   
+       
     if not options.out_dir:   # if output directory not given
         parser.error('Output directory is not specified')
     else:
@@ -607,6 +602,7 @@ def main():
     else:
         namg=options.namg
 
+    in_fast2xydat='FELsource_params.txt'
     #copy-paste from else block of the cell below
     out_fast2xydat='PPROC-FAST2XY_2013.DAT'
     #@

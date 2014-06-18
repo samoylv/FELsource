@@ -728,29 +728,7 @@ else:
         os.chdir(thepath)
 
 
-# In[ ]:
 
-#%tb
-
-
-# In[ ]:
-
-#ls 
-
-
-# In[ ]:
-
-#ff_data = numpy.loadtxt(fel_data_path+set_oname_2014(namg,'F'+str(nharm)+'_',ifb,nzc)+'.RES')
-
-
-# In[ ]:
-
-print doCopyRes
-
-
-# In[ ]:
-
-jmax
 
 
 # In[ ]:

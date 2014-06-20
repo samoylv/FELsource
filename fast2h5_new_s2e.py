@@ -316,7 +316,8 @@ def update(in_fast2xydat='PPROC-FAST2XY_2013_LP.DAT',trd1=0.,trd2=None,
         for idx in range(0,7):
             print a[idx]
     aout=a[0:31]
-    numpy.savetxt( in_fast2xydat,aout,fmt='%s')  
+    numpy.savetxt( in_fast2xydat,aout,fmt='%s') 
+    os.system('chmod a+rw '+in_fast2xydat)
     return namg,ifb,nzc
 
 
@@ -728,29 +729,7 @@ else:
         os.chdir(thepath)
 
 
-# In[ ]:
 
-#%tb
-
-
-# In[ ]:
-
-#ls 
-
-
-# In[ ]:
-
-#ff_data = numpy.loadtxt(fel_data_path+set_oname_2014(namg,'F'+str(nharm)+'_',ifb,nzc)+'.RES')
-
-
-# In[ ]:
-
-print doCopyRes
-
-
-# In[ ]:
-
-jmax
 
 
 # In[ ]:

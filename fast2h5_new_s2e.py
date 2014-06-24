@@ -716,12 +716,12 @@ else:
             print 'The result hdf5 file  '+out_fname+'.h5 will be copied/moved to '
             #print out_dir+'/'+ set_FELout_name('prop_in',trd1)+'.h5'
             print out_dir+'/'+ prop_in_fname+'.h5'
-            #if jmax == 1:
+            ##if jmax == 1:
             shutil.move(os.path.join(work_dir,out_fname+'.h5'), 
                         os.path.join(out_dir,prop_in_fname+'.h5'))
-            #else:
-            #    shutil.copy(os.path.join(work_dir,out_fname+'.h5'), 
-            #                os.path.join(out_dir,prop_in_fname+'.h5'))
+            ##else:
+            ##    shutil.copy(os.path.join(work_dir,out_fname+'.h5'), 
+            ##                os.path.join(out_dir,prop_in_fname+'.h5'))
         else:
             print out_fname, prop_in_fname
             print '... done'

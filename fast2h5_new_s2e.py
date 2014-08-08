@@ -114,9 +114,12 @@ def set_FELout_name(bname,val):
         sval=str(int(numpy.ceil(val)))
         fname = bname + '_'+sval
     if int(val) < 10:
-        fname = bname+'_00'+sval
+        fname = bname+ '_000'+sval
     if  (int(val) >= 10) and (int(val) < 100):
-        fname = bname+ '_0'+sval
+        fname = bname+  '_00'+sval
+    if (int(val) >= 100) and (int(val) < 1000):
+        fname = bname+  '_0'+sval
+    
     return fname
 
 

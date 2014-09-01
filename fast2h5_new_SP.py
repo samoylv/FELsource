@@ -12,7 +12,7 @@
 
 # <codecell>
 
-isS2E = False        # True if working at S2E server
+isS2E = True        # True if working at S2E server
 isIpynb = False       # True if working with iPython notebook
 if isS2E:
     isIpynb = False  # at S2E we only run the python script 

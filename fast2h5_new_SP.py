@@ -1,7 +1,7 @@
-# -*- coding: utf-8 -*-
-# <nbformat>3.0</nbformat>
 
-# <codecell>
+# coding: utf-8
+
+# In[ ]:
 
 # Contact L.Samoylova <liubov.samoylova@xfel.eu>, A.Buzmakov <buzmakov@gmail.com>
 # SPB S2E simulation project, European XFEL Hamburg <www.xfel.eu>
@@ -10,9 +10,10 @@
 # SRW core library <https://github.com/ochubar/SRW>, and 
 # WPG framework <https://github.com/samoylv/WPG>
 
-# <codecell>
 
-isS2E = False        # True if working at S2E server
+# In[ ]:
+
+isS2E = True        # True if working at S2E server, make it True before downloading as .py!
 isIpynb = False       # True if working with iPython notebook
 if isS2E:
     isIpynb = False  # at S2E we only run the python script 
@@ -20,7 +21,8 @@ if isS2E:
 isLP = False
 NHARM = 1
 
-# <codecell>
+
+# In[ ]:
 
 #Importing necessary modules
 import sys
@@ -43,7 +45,8 @@ import h5py
 #Import base wavefront class
 from wpg import Wavefront
 
-# <codecell>
+
+# In[ ]:
 
 def dequote(s):
     """
@@ -55,7 +58,8 @@ def dequote(s):
         return s[1:-1]
     return s
 
-# <codecell>
+
+# In[ ]:
 
 def mkdir_p(path):
     """
@@ -69,7 +73,8 @@ def mkdir_p(path):
         else:
             raise
 
-# <codecell>
+
+# In[ ]:
 
 def set_ABCDname(prefix,ftype,idx,nz):
     """
@@ -82,7 +87,8 @@ def set_ABCDname(prefix,ftype,idx,nz):
         name="%s%s%s%s.RES" %(prefix,ftype,str(idx).zfill(4),str(nz).zfill(3))
     return name
 
-# <codecell>
+
+# In[ ]:
 
 def set_out_name(prefix,idx):
     """
@@ -92,12 +98,14 @@ def set_out_name(prefix,idx):
     name="%s_%s.h5" %(prefix,str(idx).zfill(7))
     return name
 
-# <codecell>
+
+# In[ ]:
 
 #print set_ABCDname('S1_0.25NM_12GEV_20pC_N1_','PXY1',2,35)
 print set_out_name('S1_0.25NM_12GEV_20pC_N1_',2)
 
-# <codecell>
+
+# In[ ]:
 
 def set_pzname(namg,ifb):
     """
@@ -107,7 +115,8 @@ def set_pzname(namg,ifb):
     name = namg+'PZ1_'+str(ifb).zfill(4)+'000.RES'
     return name
 
-# <codecell>
+
+# In[ ]:
 
 def set_in_felname(namg,ifb,nz):
     """
@@ -117,7 +126,8 @@ def set_in_felname(namg,ifb,nz):
     name = namg+'T'+str(ifb).zfill(4)+str(nz).zfill(3) 
     return name
 
-# <codecell>
+
+# In[ ]:
 
 def parse_toe_file(f_name):
     """ Parse <prefix>T*.RES file to list of strings """
@@ -140,7 +150,8 @@ def parse_toe_file(f_name):
 #Example of usage:
 #params, rows=parse_toe_file(toe_file_name)
 
-# <codecell>
+
+# In[ ]:
 
 def create_numpy_array_from_rows(rows,slices=None):
     # slice size (Re, Im)
@@ -157,7 +168,8 @@ def create_numpy_array_from_rows(rows,slices=None):
     if doPrint: print 'return swapaxes(y,0,2)',y.shape
     return y
 
-# <codecell>
+
+# In[ ]:
 
 def store_wavefront_hdf5(wf_struct,file_name):
     """ Store wavefront structure in hdf5 file"""
@@ -184,7 +196,8 @@ def store_wavefront_hdf5(wf_struct,file_name):
     with h5py.File(file_name, 'w') as res_file:
         store_group(wf_struct,res_file)
 
-# <codecell>
+
+# In[ ]:
 
 def load_wavefront_hdf5(file_name):
     """Return dictionary with fields of wavefront"""
@@ -204,7 +217,8 @@ def load_wavefront_hdf5(file_name):
         
     return wf
 
-# <codecell>
+
+# In[ ]:
 
 def _resample(wf, axis, data, x0, x1):
     if axis.lower()=='x':
@@ -264,7 +278,8 @@ def phase_cut(wf, axis, polarization, x0=None, x1=None, M=0):
     data = wf.get_phase(slice_number=M, polarization=pol)
     return _resample(wf, axis, data, x0, x1)
 
-# <codecell>
+
+# In[ ]:
 
 def update(in_fast2xydat,fast2xydat='PPROC-FAST2XY_2013.DAT',trd1=0.,trd2=None,
            nxy=None,nskip=None,ifb=None,nzc=None,namg=None):
@@ -315,10 +330,11 @@ def update(in_fast2xydat,fast2xydat='PPROC-FAST2XY_2013.DAT',trd1=0.,trd2=None,
             print a[idx]
     aout=a[0:31]
     numpy.savetxt(fast2xydat,aout,fmt='%s')  
-    os.system('chmod a+rw '+in_fast2xydat)
+    os.system('chmod a+rw '+fast2xydat)
     return namg,ifb,nzc
 
-# <codecell>
+
+# In[ ]:
 
 def fill_wf_history(wf_struct,fast_readme,fast_internal):
     """
@@ -345,7 +361,8 @@ def fill_wf_history(wf_struct,fast_readme,fast_internal):
     wf_struct['history/parent/detail']={
                                         'params':(f_internal.readlines(),'s')}
 
-# <codecell>
+
+# In[ ]:
 
 def fill_wf_params(wf_struct,params,nrows):
     """
@@ -397,7 +414,8 @@ def fill_wf_params(wf_struct,params,nrows):
     #xStep*1e-3: |E|^2 in W/mm^2 but not W/m^2
     return RK1/(xStep*1e3)**2,nStart,nEnd
 
-# <codecell>
+
+# In[ ]:
 
 def add_wf_attributes(fname0):
     """
@@ -422,7 +440,8 @@ def add_wf_attributes(fname0):
                 pass
             h2.copy('params',h1) #copy h2['params'] to h1
 
-# <codecell>
+
+# In[ ]:
 
 def convert_fast2h5(fel_data_path,fast2xyexe,fast2xydat,fast_readme,fast_internal,namg,ifb,nzc):
     """
@@ -486,7 +505,8 @@ def convert_fast2h5(fel_data_path,fast2xyexe,fast2xydat,fast_readme,fast_interna
     add_wf_attributes(fname0)
     return fname0
 
-# <codecell>
+
+# In[ ]:
 
 def main():
     # typical command line parameters:
@@ -606,7 +626,8 @@ def main():
                             os.path.join(out_dir,prop_in_fname))
         os.chdir(work_dir)
 
-# <codecell>
+
+# In[ ]:
 
 #$
 if not isIpynb:
@@ -678,18 +699,23 @@ else:
             print '... done'
         os.chdir(work_dir)
 
-# <codecell>
+
+# In[ ]:
 
 #%tb
 
-# <codecell>
+
+# In[ ]:
 
 #ls 
 
-# <codecell>
+
+# In[ ]:
 
 NHARM
 
-# <codecell>
+
+# In[ ]:
+
 
 

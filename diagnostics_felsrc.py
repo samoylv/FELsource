@@ -1,8 +1,8 @@
 import sys
 # sys.path.insert(0, '../WPG')
 # sys.path.insert(0,'/diskmnt/a/lsamoylv/WPG')
-# sys.path.insert(0,'/data/S2E/packages/WPG')
-sys.path.insert(0,'/Users/lsamoylv/code/WPG')
+sys.path.insert(0,'/data/S2E/packages/WPG')
+# sys.path.insert(0,'/Users/lsamoylv/code/WPG')
 
 
 import os

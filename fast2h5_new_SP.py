@@ -356,7 +356,48 @@ def fill_wf_history(wf_struct,fast_readme,fast_internal):
         E-mail: evgeny.schneidmiller@desy.de
         Tel. +49 40 8998 2676''','s'),
         'data_description':(f_readme.readlines(),'s'),
-        'method_description':(r'''code FAST''','s'),
+        'method_description':(r'''
+        FEL simulation code FAST (E.A. Schneidmiller and M. V. Yurkov)
+
+        FAST is generic name for a set of codes for analysis of the FEL amplification 
+        process in the framework of 1-D and 3-D models using different techniques
+        described in [1-5]. Analytical techniques implemented in these codes allow to
+        analyze beam radiation modes (eigenvalue equation), and amplification process
+        in the linear stage of amplification (initial-value problem). Numerical
+        simulation codes allow to simulate FEL process using both, steady-state and
+        time-dependent models. Algorithm of three-dimensional simulation code FAST [6]
+        takes into account all important physical effects: diffraction of radiation,
+        slippage of radiation (time-dependent effects), space charge, emittance
+        (betatron oscillations), and energy spread in the electron beam. An
+        approximation a uniform electron beam focusing is used in the simulation code.
+        Field solver uses expansion of the radiation in the azimuthal modes.
+        Calculation of the radiation fields is performed using retarded potentials.
+        The code allows to simulate amplification process in helical and planar
+        undulators. Simulation of higher odd harmonics in the planar undulator
+        geometry is possible [6]. The code has been thoroughly tested in the high gain
+        exponential regime using analytical results for the beam radiation modes
+        (complex eigenvalues and eigenfunctions) [1-3]. Start-up from the shot noise
+        and linear stage of amplification in the code FAST has been also tested using
+        three-dimensional analytical results for the initial-value problem [4].
+
+        Start-up from the shot noise in the electron beam in the code FAST can be
+        simulated with an artificial ensemble [7,8], and with tracing actual number of
+        electrons in the beam [9]. The latter option is straightforward and
+        transparent: simulation procedure corresponds to real electrons randomly
+        distributed in full 6D phase space. This allows us to avoid any artificial
+        effects arising from standard procedures of macroparticle loading as it
+        described in [9].
+
+        [1] E.L. Saldin, E.A. Schneidmiller, M.V. Yurkov, ``The Physics of Free Electron Lasers'' (Springer-Verlag, Berlin, 1999).
+        [2] E.L. Saldin, E.A. Schneidmiller and M.V. Yurkov, Nucl. Instrum. and Methods A 475 (2001) 86.
+        [3] E.A. Schneidmiller and M.V. Yurkov, Phys. Rev. ST Accel. Beams 15 (2012) 080702.
+        [4] E.L. Saldin, E.A. Schneidmiller, and M.V. Yurkov, Opt. Commun. 186(2000)185.
+        [5] E.A. Schneidmiller, and M.V. Yurkov, Proc. FEL 2012 Conference, http://accelconf.web.cern.ch/AccelConf/FEL2012/papers/ mopd08.pdf.
+        [6] E.L. Saldin, E.A. Schneidmiller, and M.V. Yurkov, Nucl. Instrum. and Methods A 429(1999)233.
+        [7] C. Penman, B.W.J. McNeil, Optics Comm. 90 (1992) 82.
+        [8] W.M. Fawley, Phys. Rev. STAB 5(2002)070701.
+        [9] E.L. Saldin, E.A. Schneidmiller, and M.V. Yurkov,Opt. Commun. 281(2008)1179.
+          ''','s'),
         'package_version':(r'''FAST v2.06''','s')}
     wf_struct['history/parent/detail']={
                                         'params':(f_internal.readlines(),'s')}

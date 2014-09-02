@@ -101,12 +101,6 @@ def set_out_name(prefix,idx):
 
 # In[ ]:
 
-#print set_ABCDname('S1_0.25NM_12GEV_20pC_N1_','PXY1',2,35)
-print set_out_name('S1_0.25NM_12GEV_20pC_N1_',2)
-
-
-# In[ ]:
-
 def set_pzname(namg,ifb):
     """
     Set the file name with gain curve data as it is defined in FAST data set

@@ -419,8 +419,10 @@ def fill_wf_params(wf_struct,params,nrows):
     nEnd=nrows/(2*nx*nx)
     xMin = -xStep*(nx-1)/2
     xMax =  xStep*(nx-1)/2
-    slMin = slMin0 + (nStart-1)*slStep
-    slMax = slMin0 + (nEnd - 1)*slStep
+    #slMin = slMin0 + (nStart-1)*slStep
+    #slMax = slMin0 + (nEnd - 1)*slStep
+    slMin = -slStep*(nEnd - 1)/2
+    slMax =  slStep*(nEnd - 1)/2
     if doPrint: print 'wl [nm], Eph [keV]',wl*1e9,photonEnergy*1e-3
     if doPrint: print 'nStart,nEnd: ',nStart,nEnd
     if doPrint: print 'nSlices,slMin,slMax [fs]: ',nEnd,slMin*1e15,slMax*1e15

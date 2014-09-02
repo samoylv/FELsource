@@ -392,7 +392,8 @@ def fill_wf_history(wf_struct,fast_readme,fast_internal):
         [2] E.L. Saldin, E.A. Schneidmiller and M.V. Yurkov, Nucl. Instrum. and Methods A 475 (2001) 86.
         [3] E.A. Schneidmiller and M.V. Yurkov, Phys. Rev. ST Accel. Beams 15 (2012) 080702.
         [4] E.L. Saldin, E.A. Schneidmiller, and M.V. Yurkov, Opt. Commun. 186(2000)185.
-        [5] E.A. Schneidmiller, and M.V. Yurkov, Proc. FEL 2012 Conference, http://accelconf.web.cern.ch/AccelConf/FEL2012/papers/ mopd08.pdf.
+        [5] E.A. Schneidmiller, and M.V. Yurkov, Proc. FEL 2012 Conference, 
+        http://accelconf.web.cern.ch/AccelConf/FEL2012/papers/ mopd08.pdf.
         [6] E.L. Saldin, E.A. Schneidmiller, and M.V. Yurkov, Nucl. Instrum. and Methods A 429(1999)233.
         [7] C. Penman, B.W.J. McNeil, Optics Comm. 90 (1992) 82.
         [8] W.M. Fawley, Phys. Rev. STAB 5(2002)070701.

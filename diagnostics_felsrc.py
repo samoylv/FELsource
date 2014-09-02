@@ -14,8 +14,9 @@ from wpg import Wavefront
 
 def show_diagnostics(FELsource_out_number):
       # read FELsource_out_.h5
-      if not FELsource_out_number == 'FELsource_out_1.h5':
-            FELsource_out_file = "FELsource_out_{}.h5".format(FELsource_out_number.zfill(7))
+      if not FELsource_out_number == 'FELsource_out_0000001.h5':
+            #FELsource_out_file = "FELsource_out_{}.h5".format(FELsource_out_number.zfill(7))
+            FELsource_out_file = "{}.h5".format(FELsource_out_number.zfill(7))
       else:
             FELsource_out_file = FELsource_out_number
 

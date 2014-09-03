@@ -90,12 +90,12 @@ def set_ABCDname(prefix,ftype,idx,nz):
 
 # In[ ]:
 
-def set_out_name(prefix,idx):
+def set_out_name(prefix,suffix):
     """
     Set the output h5 file name 
-    of prefix and 7-digit suffix
+    of prefix and suffix
     """
-    name="%s_%s.h5" %(prefix,str(idx).zfill(7))
+    name="%s_%s.h5" %(prefix,suffix)
     return name
 
 
@@ -537,7 +537,7 @@ def convert_fast2h5(fel_data_path,fast2xyexe,fast2xydat,fast_readme,fast_interna
                                              #'fwhm_curve':(fwhm_data,'f') #<- not defined for long pulse data
     
     #store wavefront in hdf5 file
-    fname0 = set_out_name(namg+str(nzc).zfill(3),ifb)
+    fname0 = set_out_name(namg+str(nzc).zfill(3),str(ifb).zfill(4))
     if doPrint: print "Store wavefront in hdf5 file: "+fname0
     store_wavefront_hdf5(wf_struct,fname0)
     add_wf_attributes(fname0)
@@ -553,8 +553,8 @@ def main():
     parser = OptionParser()
     parser.add_option("-o", "--output-dir",          dest="out_dir", help="Output directory", )
     parser.add_option("-d", "--data-path",           dest="datapath",help="FEL data path", )
-    parser.add_option("-f", "--file-id",             dest="f_id",    help="ID of the first of output files: FELsource_out_<ID+{0..JMAX-1}>", )
-    parser.add_option("-j", "--jmax",                dest="jmax",    help="how many output pulses should be provided (1 by default)", )
+    parser.add_option("-f", "--suffix",              dest="suffix",help="suffix for the first output file: FELsource_out_<suffix>", )
+    parser.add_option("-j", "--jmax",                dest="jmax",    help="how many output pulses should be generated (1 if not specified)", )
     parser.add_option("-t", "--time-start",          dest="trd1",    help="Start time value for reading the pulse, fs")
     parser.add_option("-q", "--time-end",            dest="trd2",    help="End time value for reading the pulse, fs")
     parser.add_option("-n", "--nxy",                 dest="nxy",     help="Number of xy nodes")
@@ -576,10 +576,10 @@ def main():
     else:
         fel_data_path=options.datapath
         
-    if not options.f_id:   # if time value not given
-        f_id = 1 #default value
+    if not options.suffix:   # if suffix not given
+        suffix=str(1).zfill(7) #default value
     else:
-        f_id=int(float(options.f_id))
+        suffix=options.suffix
 
     if not options.trd1:   # if time value not given
         trd1 = 0.
@@ -595,6 +595,11 @@ def main():
         nzc=35 #default value
     else:
         nzc=int(float(options.nzc))
+
+    if not options.ifb:   # if ifb value not given
+        ifb=None
+    else:
+        ifb=int(float(options.ifb))
 
     if not options.nskip:   # if nskip value not given
         nskip=1 # no skip
@@ -626,9 +631,8 @@ def main():
     fast_internal = os.path.join(fel_data_path,'FAST_2013.DAT')
     
     #doPrint = True # switch on/off debug printing    
-    doCopyRes = True # switch on/off copying results into FELsource/prop_in_XXX.h5    
     if isS2E: 
-        work_dir ='/data/S2E/data/FELsource/';doCopyRes=True
+        work_dir ='/data/S2E/data/FELsource/';
     else:
         out_dir = '/diskmnt/a/lsamoylv/sim_data/FELsource'
         work_root_dir = '/diskmnt/a/lsamoylv/FELsource/' #working directory to process the data 
@@ -641,28 +645,23 @@ def main():
         print 'All temporary files will be saved in \n'+ tmp_dir+'/'
     os.chdir(work_dir)
     fast2xyexe='pproc-fast2xy-2013-v2-06-wo-fname.exe';fast2xydat='PPROC-FAST2XY_2013.DAT'
-    for idx in range(0,jmax):
-        ifb = idx+f_id
-        namg,ifb,nzc = update(in_fast2xydat,fast2xydat,trd1=trd1,trd2=trd2,ifb=ifb,nskip=nskip,nzc=nzc)
-        if doPrint: print 'namg,ifb,nzc:',namg,ifb,nzc
-        shutil.copy(os.path.join(work_dir,fast2xydat), tmp_dir)
-        shutil.copy(os.path.join(work_dir,fast2xyexe), tmp_dir)  
-        os.chdir(tmp_dir)
-        in_fname=convert_fast2h5(fel_data_path,fast2xyexe,fast2xydat,fast_readme,fast_internal,namg,ifb,nzc)
-        out_fname     = set_out_name(in_fname,       (f_id+idx))
-        prop_in_fname = set_out_name('FELsource_out',(f_id+idx))
+    namg,ifb,nzc = update(in_fast2xydat,fast2xydat,trd1=trd1,trd2=trd2,ifb=ifb,nskip=nskip,nzc=nzc)
+    if doPrint: print 'namg,ifb,nzc:',namg,ifb,nzc
+    shutil.copy(os.path.join(work_dir,fast2xydat), tmp_dir)
+    shutil.copy(os.path.join(work_dir,fast2xyexe), tmp_dir)  
+    os.chdir(tmp_dir)
+    in_fname=convert_fast2h5(fel_data_path,fast2xyexe,fast2xydat,fast_readme,fast_internal,namg,ifb,nzc)
+    out_fname     = set_out_name(in_fname,       suffix)
+    prop_in_fname = set_out_name('FELsource_out',suffix)
         
-        if doPrint: print 'in_fname,out_fname,prop_in_fname:',in_fname,out_fname,prop_in_fname
-        os.system('chmod a+rw '+ tmp_dir+'/*.*')    
-        
-        shutil.copy(in_fname, os.path.join(work_dir,out_fname))
-
-        print 'The result hdf5 file  '+out_fname+' will be moved to '
-        print out_dir+'/'+ prop_in_fname            
-        shutil.move(os.path.join(work_dir,out_fname), 
-                            os.path.join(out_dir,prop_in_fname))
-        os.chdir(work_dir)
-                
+    if doPrint: print 'in_fname,out_fname,prop_in_fname:',in_fname,out_fname,prop_in_fname
+    os.system('chmod a+rw '+ tmp_dir+'/*.*')    
+    shutil.copy(in_fname, os.path.join(work_dir,out_fname))
+    print 'The result hdf5 file  '+out_fname+' will be moved to '
+    print out_dir+'/'+ prop_in_fname            
+    shutil.move(os.path.join(work_dir,out_fname), 
+                os.path.join(out_dir,prop_in_fname))
+    os.chdir(work_dir)
     shutil.rmtree(tmp_dir)
 
 
@@ -684,7 +683,7 @@ else:
     fel_data_path='/pnfs/desy.de/exfel/disk/XFEL/2013/SIM/FAST/'
     dir_prefix='2014-05_XFEL_5keV_12GeV_';
     in_fast2xydat='PPROC-FAST2XY_2013.DAT'
-    e_charge='20pC';f_id=1;trd1=1.5;trd2=6.5;nskip=7;nzc=35;jmax=1
+    e_charge='20pC';suffix='0000001';trd1=1.5;trd2=6.5;nskip=7;nzc=35
     fel_data_dir=dir_prefix+e_charge+'_N1'
     nharm = NHARM
     
@@ -708,35 +707,23 @@ else:
         print 'All temporary files will be saved in \n'+ tmp_dir+'/'
     os.chdir(work_dir)
     fast2xyexe='pproc-fast2xy-2013-v2-06-wo-fname.exe';fast2xydat='PPROC-FAST2XY_2013.DAT'
-    for idx in range(0,jmax):
-        ifb = idx+f_id
-        namg,ifb,nzc = update(in_fast2xydat,fast2xydat,trd1=trd1,trd2=trd2,ifb=ifb,nskip=nskip,nzc=nzc)
-        if doPrint: print 'namg,ifb,nzc:',namg,ifb,nzc
-        shutil.copy(os.path.join(work_dir,fast2xydat), tmp_dir)
-        shutil.copy(os.path.join(work_dir,fast2xyexe), tmp_dir)  
+    namg,ifb,nzc = update(in_fast2xydat,fast2xydat,trd1=trd1,trd2=trd2,ifb=ifb,nskip=nskip,nzc=nzc)
+    if doPrint: print 'namg,ifb,nzc:',namg,ifb,nzc
+    shutil.copy(os.path.join(work_dir,fast2xydat), tmp_dir)
+    shutil.copy(os.path.join(work_dir,fast2xyexe), tmp_dir)  
+    os.chdir(tmp_dir)
+    in_fname=convert_fast2h5(fel_data_path,fast2xyexe,fast2xydat,fast_readme,fast_internal,namg,ifb,nzc)
+    out_fname     = set_out_name(in_fname,       suffix)
+    prop_in_fname = set_out_name('FELsource_out',suffix)
         
-        os.chdir(tmp_dir)
-        in_fname=convert_fast2h5(fel_data_path,fast2xyexe,fast2xydat,fast_readme,fast_internal,namg,ifb,nzc)
-        out_fname     = set_out_name(in_fname,       (f_id+idx))
-        prop_in_fname = set_out_name('FELsource_out',(f_id+idx))
-        
-        if doPrint: print 'in_fname,out_fname,prop_in_fname:',in_fname,out_fname,prop_in_fname
-        os.system('chmod a+rw '+ tmp_dir+'/*.*')    
-        
-        shutil.copy(in_fname, os.path.join(work_dir,out_fname))
-    
-        if doCopyRes:
-            print 'The result hdf5 file  '+out_fname+' will be copied/moved to '
-            print out_dir+'/'+ prop_in_fname
-            if jmax == 1:
-                shutil.move(os.path.join(work_dir,   out_fname), os.path.join(out_dir,prop_in_fname))
-            else:
-                shutil.copy(os.path.join(work_dir,   out_fname), os.path.join(out_dir,prop_in_fname))
-        else:
-            print out_fname, prop_in_fname
-            print '... done'
-        os.chdir(work_dir)
-        
+    if doPrint: print 'in_fname,out_fname,prop_in_fname:',in_fname,out_fname,prop_in_fname
+    os.system('chmod a+rw '+ tmp_dir+'/*.*')    
+    shutil.copy(in_fname, os.path.join(work_dir,out_fname))
+    print 'The result hdf5 file  '+out_fname+' will be moved to '
+    print out_dir+'/'+ prop_in_fname            
+    shutil.move(os.path.join(work_dir,out_fname), 
+                os.path.join(out_dir,prop_in_fname))
+    os.chdir(work_dir)
     shutil.rmtree(tmp_dir)
 
 

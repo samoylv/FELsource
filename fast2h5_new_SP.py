@@ -553,7 +553,7 @@ def main():
     parser = OptionParser()
     parser.add_option("-o", "--output-dir",          dest="out_dir", help="Output directory", )
     parser.add_option("-d", "--data-path",           dest="datapath",help="FEL data path", )
-    parser.add_option("-f", "--suffix",              dest="suffix",help="suffix for the first output file: FELsource_out_<suffix>", )
+    parser.add_option("-f", "--suffix",              dest="suffix",  help="suffix for the first output file: FELsource_out_<suffix>", )
     parser.add_option("-j", "--jmax",                dest="jmax",    help="how many output pulses should be generated (1 if not specified)", )
     parser.add_option("-t", "--time-start",          dest="trd1",    help="Start time value for reading the pulse, fs")
     parser.add_option("-q", "--time-end",            dest="trd2",    help="End time value for reading the pulse, fs")
@@ -627,7 +627,6 @@ def main():
     
     fel_data_path=fel_data_path+fel_data_dir
     in_fast2xydat = os.path.join(fel_data_path,in_fast2xydat) 
-    fast_readme = os.path.join(fel_data_path,dir_prefix+e_charge+'_readme.txt')
     fast_internal = os.path.join(fel_data_path,'FAST_2013.DAT')
     
     #doPrint = True # switch on/off debug printing    
@@ -646,6 +645,7 @@ def main():
     os.chdir(work_dir)
     fast2xyexe='pproc-fast2xy-2013-v2-06-wo-fname.exe';fast2xydat='PPROC-FAST2XY_2013.DAT'
     namg,ifb,nzc = update(in_fast2xydat,fast2xydat,trd1=trd1,trd2=trd2,ifb=ifb,nskip=nskip,nzc=nzc)
+    fast_readme = os.path.join(fel_data_path,dir_prefix+e_charge+'_N1_readme.txt')
     if doPrint: print 'namg,ifb,nzc:',namg,ifb,nzc
     shutil.copy(os.path.join(work_dir,fast2xydat), tmp_dir)
     shutil.copy(os.path.join(work_dir,fast2xyexe), tmp_dir)  

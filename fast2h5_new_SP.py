@@ -393,7 +393,7 @@ def fill_wf_history(wf_struct,fast_readme,fast_internal):
         [8] W.M. Fawley, Phys. Rev. STAB 5(2002)070701.
         [9] E.L. Saldin, E.A. Schneidmiller, and M.V. Yurkov,Opt. Commun. 281(2008)1179.
           ''','s'),
-        'package_version':(r'''FAST v2.06''','s')}
+        'package_version':(r'''fast-2013-v2-06''','s')}
     wf_struct['history/parent/detail']={
                                         'params':(f_internal.readlines(),'s')}
 
@@ -656,13 +656,14 @@ def main():
         os.system('chmod a+rw '+ tmp_dir+'/*.*')    
         
         shutil.copy(in_fname, os.path.join(work_dir,out_fname))
-        shutil.rmtree(tmp_dir)
 
         print 'The result hdf5 file  '+out_fname+' will be moved to '
         print out_dir+'/'+ prop_in_fname            
         shutil.move(os.path.join(work_dir,out_fname), 
                             os.path.join(out_dir,prop_in_fname))
         os.chdir(work_dir)
+                
+    shutil.rmtree(tmp_dir)
 
 
 # In[ ]:
@@ -723,7 +724,6 @@ else:
         os.system('chmod a+rw '+ tmp_dir+'/*.*')    
         
         shutil.copy(in_fname, os.path.join(work_dir,out_fname))
-        shutil.rmtree(tmp_dir)
     
         if doCopyRes:
             print 'The result hdf5 file  '+out_fname+' will be copied/moved to '
@@ -736,6 +736,8 @@ else:
             print out_fname, prop_in_fname
             print '... done'
         os.chdir(work_dir)
+        
+    shutil.rmtree(tmp_dir)
 
 
 # In[ ]:

@@ -393,7 +393,7 @@ def fill_wf_history(wf_struct,fast_readme,fast_internal):
         [9] E.L. Saldin, E.A. Schneidmiller, and M.V. Yurkov,Opt. Commun. 281(2008)1179.
           ''','s'),
         'package_version':(r'''fast-2013-v2-06''','s')}
-    if os.path.isfile(f_internal):
+    if os.path.isfile(fast_internal):
         f_internal = open(fast_internal,'r')
         wf_struct['history/parent/detail']={'params':(f_internal.readlines(),'s')}
         

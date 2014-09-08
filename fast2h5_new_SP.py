@@ -468,7 +468,9 @@ def add_wf_attributes(fname0):
     wf_struct.load_hdf5(in_fname)
     wfr = wf_struct._srwl_wf
     wf_struct = Wavefront(wfr)
-    if doPrint: print('Saving the wavefront data with attributes:'+bare_fname)
+    if doPrint: print('Resizing and saving the wavefront data with attributes:'+bare_fname)
+    #Resizing: decreasing Range of Horizontal and Vertical Position:
+    wpg.srwlib.srwl.ResizeElecField(wfr._srwl_wf, 'c', [0, 0.5, 1, 0.5,  1]);
     wf_struct.store_hdf5(bare_fname)
     if doPrint: print('Replacing data with attributes from  '+bare_fname)
     with h5py.File(bare_fname) as h2:
@@ -512,6 +514,7 @@ def convert_fast2h5(fel_data_path,fast2xyexe,fast2xydat,fast_readme,fast_interna
     RK1,nStart,nEnd = fill_wf_params(wf_struct, params,numpy.size(rows))
     #build numpy arrays from list of rows
     wf_data=create_numpy_array_from_rows(rows,slices=range(nStart-1,nEnd))
+
     del rows
     wf_struct['data']={
                        'arrEhor':(wf_data*numpy.sqrt(RK1),'f'),

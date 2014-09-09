@@ -467,11 +467,11 @@ def add_wf_attributes(fname0):
     wf_struct=Wavefront()
     wf_struct.load_hdf5(in_fname)
     wfr = wf_struct._srwl_wf
-    wf_struct = Wavefront(wfr)
     if doPrint: print('Resizing and saving the wavefront data with attributes:'+bare_fname)
     #Resizing: decreasing Range of Horizontal and Vertical Position:
     from wpg.srwlib import srwl
     srwl.ResizeElecField(wfr, 'c', [0, 0.5, 1, 0.5,  1]);
+    wf_struct = Wavefront(wfr)
     wf_struct.store_hdf5(bare_fname)
     if doPrint: print('Replacing data with attributes from  '+bare_fname)
     with h5py.File(bare_fname) as h2:

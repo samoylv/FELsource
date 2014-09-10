@@ -1,7 +1,7 @@
+# -*- coding: utf-8 -*-
+# <nbformat>3.0</nbformat>
 
-# coding: utf-8
-
-# In[ ]:
+# <codecell>
 
 # Contact L.Samoylova <liubov.samoylova@xfel.eu>, A.Buzmakov <buzmakov@gmail.com>
 # SPB S2E simulation project, European XFEL Hamburg <www.xfel.eu>
@@ -10,8 +10,7 @@
 # SRW core library <https://github.com/ochubar/SRW>, and 
 # WPG framework <https://github.com/samoylv/WPG>
 
-
-# In[ ]:
+# <codecell>
 
 isS2E = True        # True if working at S2E server, make it True before downloading as .py!
 isIpynb = False       # True if working with iPython notebook
@@ -20,9 +19,9 @@ if isS2E:
      
 isLP = False
 NHARM = 1
+RESIZING = 0.5
 
-
-# In[ ]:
+# <codecell>
 
 #Importing necessary modules
 import sys
@@ -34,7 +33,8 @@ if isS2E:
     doPrint = False
 else:
     #sys.path.insert(0,'../..')
-    sys.path.insert(0,'/diskmnt/a/lsamoylv/WPG')
+#    sys.path.insert(0,'/diskmnt/a/lsamoylv/WPG')
+    sys.path.insert(0,'/diskmnt/a/lsamoylv/test/WPG-feature-srw-update')
     doPrint = True
 
 import shutil
@@ -45,8 +45,7 @@ import h5py
 #Import base wavefront class
 from wpg import Wavefront
 
-
-# In[ ]:
+# <codecell>
 
 def dequote(s):
     """
@@ -58,8 +57,7 @@ def dequote(s):
         return s[1:-1]
     return s
 
-
-# In[ ]:
+# <codecell>
 
 def mkdir_p(path):
     """
@@ -73,8 +71,7 @@ def mkdir_p(path):
         else:
             raise
 
-
-# In[ ]:
+# <codecell>
 
 def set_ABCDname(prefix,ftype,idx,nz):
     """
@@ -87,8 +84,7 @@ def set_ABCDname(prefix,ftype,idx,nz):
         name="%s%s%s%s.RES" %(prefix,ftype,str(idx).zfill(4),str(nz).zfill(3))
     return name
 
-
-# In[ ]:
+# <codecell>
 
 def set_out_name(prefix,suffix):
     """
@@ -98,8 +94,7 @@ def set_out_name(prefix,suffix):
     name="%s_%s.h5" %(prefix,suffix)
     return name
 
-
-# In[ ]:
+# <codecell>
 
 def set_pzname(namg,ifb):
     """
@@ -109,8 +104,7 @@ def set_pzname(namg,ifb):
     name = namg+'PZ1_'+str(ifb).zfill(4)+'000.RES'
     return name
 
-
-# In[ ]:
+# <codecell>
 
 def set_in_felname(namg,ifb,nz):
     """
@@ -120,8 +114,7 @@ def set_in_felname(namg,ifb,nz):
     name = namg+'T'+str(ifb).zfill(4)+str(nz).zfill(3) 
     return name
 
-
-# In[ ]:
+# <codecell>
 
 def parse_toe_file(f_name):
     """ Parse <prefix>T*.RES file to list of strings """
@@ -144,8 +137,7 @@ def parse_toe_file(f_name):
 #Example of usage:
 #params, rows=parse_toe_file(toe_file_name)
 
-
-# In[ ]:
+# <codecell>
 
 def create_numpy_array_from_rows(rows,slices=None):
     # slice size (Re, Im)
@@ -162,8 +154,7 @@ def create_numpy_array_from_rows(rows,slices=None):
     if doPrint: print 'return swapaxes(y,0,2)',y.shape
     return y
 
-
-# In[ ]:
+# <codecell>
 
 def store_wavefront_hdf5(wf_struct,file_name):
     """ Store wavefront structure in hdf5 file"""
@@ -190,8 +181,7 @@ def store_wavefront_hdf5(wf_struct,file_name):
     with h5py.File(file_name, 'w') as res_file:
         store_group(wf_struct,res_file)
 
-
-# In[ ]:
+# <codecell>
 
 def load_wavefront_hdf5(file_name):
     """Return dictionary with fields of wavefront"""
@@ -211,8 +201,7 @@ def load_wavefront_hdf5(file_name):
         
     return wf
 
-
-# In[ ]:
+# <codecell>
 
 def _resample(wf, axis, data, x0, x1):
     if axis.lower()=='x':
@@ -272,8 +261,7 @@ def phase_cut(wf, axis, polarization, x0=None, x1=None, M=0):
     data = wf.get_phase(slice_number=M, polarization=pol)
     return _resample(wf, axis, data, x0, x1)
 
-
-# In[ ]:
+# <codecell>
 
 def update(in_fast2xydat,fast2xydat='PPROC-FAST2XY_2013.DAT',trd1=0.,trd2=None,
            nxy=None,nskip=None,ifb=None,nzc=None,namg=None):
@@ -327,8 +315,7 @@ def update(in_fast2xydat,fast2xydat='PPROC-FAST2XY_2013.DAT',trd1=0.,trd2=None,
     os.system('chmod a+rw '+fast2xydat)
     return namg,ifb,nzc
 
-
-# In[ ]:
+# <codecell>
 
 def fill_wf_history(wf_struct,fast_readme,fast_internal):
     """
@@ -398,8 +385,7 @@ def fill_wf_history(wf_struct,fast_readme,fast_internal):
         wf_struct['history/parent/detail']={'params':(f_internal.readlines(),'s')}
         
 
-
-# In[ ]:
+# <codecell>
 
 def fill_wf_params(wf_struct,params,nrows):
     """
@@ -453,8 +439,7 @@ def fill_wf_params(wf_struct,params,nrows):
     #xStep*1e-3: |E|^2 in W/mm^2 but not W/m^2
     return RK1/(xStep*1e3)**2,nStart,nEnd
 
-
-# In[ ]:
+# <codecell>
 
 def add_wf_attributes(fname0):
     """
@@ -467,10 +452,15 @@ def add_wf_attributes(fname0):
     wf_struct=Wavefront()
     wf_struct.load_hdf5(in_fname)
     wfr = wf_struct._srwl_wf
-    if doPrint: print('Resizing and saving the wavefront data with attributes:'+bare_fname)
-    #Resizing: decreasing Range of Horizontal and Vertical Position:
-    from wpg.srwlib import srwl
-    srwl.ResizeElecField(wfr, 'c', [0, 0.5, 1, 0.5,  1]);
+    if RESIZING < 1.:
+        wf_struct=Wavefront()
+        wf_struct.load_hdf5(fname0)
+        wfr = wf_struct._srwl_wf
+        from wpg.srwlib import srwl
+        srwl.ResizeElecField(wfr, 'c', [0, RESIZING, 1, RESIZING,  1]);
+        #wf_struct.store_hdf5(fname0)            
+    wf_struct = Wavefront(wfr)
+    if doPrint: print('Saving the wavefront data with attributes:'+bare_fname)
     wf_struct = Wavefront(wfr)
     wf_struct.store_hdf5(bare_fname)
     if doPrint: print('Replacing data with attributes from  '+bare_fname)
@@ -478,12 +468,13 @@ def add_wf_attributes(fname0):
         with h5py.File(in_fname) as h1:
             try:
                 del h1['params']  # delete group
+                del h1['data']  # delete group
             except KeyError:
                 pass
             h2.copy('params',h1) #copy h2['params'] to h1
+            h2.copy('data',h1)   #copy h2['data'] to h1
 
-
-# In[ ]:
+# <codecell>
 
 def convert_fast2h5(fel_data_path,fast2xyexe,fast2xydat,fast_readme,fast_internal,namg,ifb,nzc):
     """
@@ -541,6 +532,13 @@ def convert_fast2h5(fel_data_path,fast2xyexe,fast2xydat,fast_readme,fast_interna
                                              }
                                              #'fwhm_curve':(fwhm_data,'f') #<- not defined for long pulse data
     
+    if doPrint: print('Resizing the wavefront data ...')
+    #Resizing: decreasing Range of Horizontal and Vertical Position:
+    reSize = RESIZING
+    wf_struct['misc']={
+                       'resizing':(reSize,'f')
+                       }
+
     #store wavefront in hdf5 file
     fname0 = set_out_name(namg+str(nzc).zfill(3),str(ifb).zfill(4))
     if doPrint: print "Store wavefront in hdf5 file: "+fname0
@@ -548,8 +546,7 @@ def convert_fast2h5(fel_data_path,fast2xyexe,fast2xydat,fast_readme,fast_interna
     add_wf_attributes(fname0)
     return fname0
 
-
-# In[ ]:
+# <codecell>
 
 def main():
     # typical command line parameters:
@@ -669,8 +666,7 @@ def main():
     os.chdir(work_dir)
     shutil.rmtree(tmp_dir)
 
-
-# In[ ]:
+# <codecell>
 
 #$
 if not isIpynb:
@@ -688,13 +684,13 @@ else:
     fel_data_path='/pnfs/desy.de/exfel/disk/XFEL/2013/SIM/FAST/'
     dir_prefix='2014-05_XFEL_5keV_12GeV_';
     in_fast2xydat='PPROC-FAST2XY_2013.DAT'
-    e_charge='20pC';suffix='0000001';trd1=1.5;trd2=6.5;nskip=7;nzc=35
+    e_charge='20pC';ifb=1;suffix='0000001';trd1=1.5;trd2=6.5;nskip=7;nzc=35
     fel_data_dir=dir_prefix+e_charge+'_N1'
     nharm = NHARM
     
     fel_data_path=fel_data_path+fel_data_dir
     in_fast2xydat = os.path.join(fel_data_path,in_fast2xydat) 
-    fast_readme = os.path.join(fel_data_path,dir_prefix+e_charge+'_readme.txt')
+    fast_readme = os.path.join(fel_data_path,dir_prefix+e_charge+'_N1_readme.txt')
     fast_internal = os.path.join(fel_data_path,'FAST_2013.DAT')
     doPrint = True # switch on/off debug printing    
     doCopyRes = True # switch on/off copying results into FELsource/prop_in_XXX.h5    
@@ -731,23 +727,19 @@ else:
     os.chdir(work_dir)
     shutil.rmtree(tmp_dir)
 
-
-# In[ ]:
+# <codecell>
 
 #%tb
 
-
-# In[ ]:
+# <codecell>
 
 #ls 
 
+# <codecell>
 
-# In[ ]:
+#NHARM
 
-NHARM
+# <codecell>
 
-
-# In[ ]:
-
-
+#ls /pnfs/desy.de/exfel/disk/XFEL/2013/SIM/FAST/2014-05_XFEL_5keV_12GeV_20pC_N1/*readme.txt
 

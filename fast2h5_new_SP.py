@@ -19,7 +19,7 @@ if isS2E:
      
 isLP = False
 NHARM = 1
-RESIZING = 0.5
+RESIZING = 0.25
 
 # <codecell>
 

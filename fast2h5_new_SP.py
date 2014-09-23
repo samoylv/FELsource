@@ -593,7 +593,7 @@ def main():
         out_dir=options.out_dir
 
     if not options.datapath:   # if output directory not given
-        fel_data_path='/pnfs/desy.de/exfel/disk/XFEL/2013/SIM/FAST/'
+        fel_data_path='/pnfs/desy.de/exfel/disk/XFEL/sim/fast/public/'    #'/pnfs/desy.de/exfel/disk/XFEL/2013/SIM/FAST/'
     else:
         fel_data_path=options.datapath
         
@@ -701,7 +701,7 @@ else:
     #                --time-start=1.5 --time-end=6.5 --skip-nslices=7 \
     #                --e-charge='20pC' --zc-point-num=35 --jmax=1
 
-    fel_data_path='/pnfs/desy.de/exfel/disk/XFEL/sim/fast/public' #'/pnfs/desy.de/exfel/disk/XFEL/2013/SIM/FAST/'
+    fel_data_path='/pnfs/desy.de/exfel/disk/XFEL/sim/fast/public/' #'/pnfs/desy.de/exfel/disk/XFEL/2013/SIM/FAST/'
     dir_prefix='2014-05_XFEL_5keV_12GeV_';
     in_fast2xydat='PPROC-FAST2XY_2013.DAT'
     e_charge='20pC';ifb=1;suffix='0000001';trd1=1.5;trd2=6.5;nskip=7;nzc=35

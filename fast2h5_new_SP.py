@@ -720,7 +720,7 @@ else:
         work_root_dir = '/diskmnt/a/lsamoylv/FELsource/' #working directory to process the data 
         work_dir = work_root_dir+fel_data_dir
     else:
-        work_dir ='/data/S2E/data/FELsource/'
+        work_dir ='/data/S2E/modules/FELsource/'
     tmp_dir = work_dir+'/tmp'
     mkdir_p(out_dir); mkdir_p(work_dir); mkdir_p(tmp_dir)    
     if doPrint: 

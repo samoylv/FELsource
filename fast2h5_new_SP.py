@@ -652,7 +652,7 @@ def main():
     
     #doPrint = True # switch on/off debug printing    
     if isS2E: 
-        work_dir ='/data/S2E/data/FELsource/';
+        work_dir ='/data/S2E/modules/FELsource/';
     else:
         out_dir = '/diskmnt/a/lsamoylv/sim_data/FELsource'
         work_root_dir = '/diskmnt/a/lsamoylv/FELsource/' #working directory to process the data 

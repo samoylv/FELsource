@@ -20,7 +20,7 @@ if isS2E:
      
 isLP = False
 NHARM = 1
-RESIZING = 0.25
+RESIZING = 0.5
 
 
 # In[ ]:

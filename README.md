@@ -37,4 +37,4 @@ ifort -c -132 pproc-fast2xy-2013-v2-06-wo-fname.for
 
 ifort -o pproc-fast2xy-2013-v2-06-wo-fname.exe pproc-fast2xy-2013-v2-06-wo-fname.o
 # remove the Intel module
-module avail intel/2013
+module rm  intel/2013

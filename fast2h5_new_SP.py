@@ -665,7 +665,9 @@ def main():
         print 'All temporary files will be saved in \n'+ tmp_dir+'/'
     os.chdir(work_dir)
     fast2xyexe='pproc-fast2xy-2013-v2-06-wo-fname.exe';fast2xydat='PPROC-FAST2XY_2013.DAT'
-    namg,ifb,nzc = update(in_fast2xydat,fast2xydat,trd1=trd1,trd2=trd2,ifb=ifb,nskip=nskip,nzc=nzc)
+    namg,ifb,nzc = update(in_fast2xydat,fast2xydat,trd1=trd1,trd2=trd2,nskip=nskip,nzc=nzc) 
+    # [LS-2014-12-16] run number should be taken from fast2xydat!
+#    namg,ifb,nzc = update(in_fast2xydat,fast2xydat,trd1=trd1,trd2=trd2,ifb=ifb,nskip=nskip,nzc=nzc)
     fast_readme = os.path.join(fel_data_path,dir_prefix+e_charge+'_N1_readme.txt')
     if doPrint: print 'namg,ifb,nzc:',namg,ifb,nzc
     shutil.copy(os.path.join(work_dir,fast2xydat), tmp_dir)

@@ -15,13 +15,12 @@ RUN mkdir -p $ROOT_DIR
 ENV PYTHON_MAJOR 2
 ENV PYTHON_MINOR 7
 RUN apt-get update && apt-get install -y \
-    build-essential \
+    build-essential gfortran \
     python${PYTHON_MAJOR}.${PYTHON_MINOR}-dev \
     unzip python-numpy \
     python-scipy python-h5py \ 
     wget \
     nano
-
 ###################
 # Install WPG
 ###################
@@ -34,11 +33,7 @@ RUN mkdir -p $ROOT_DIR/packages && cd $ROOT_DIR/packages && \
 # Install FEL
 ###################
 
-RUN mkdir -p $ROOT_DIR/modules && cd $ROOT_DIR/modules && \
-    wget https://github.com/samoylv/prop/archive/develop.zip -O prop-develop.zip && \
-    unzip prop-develop.zip && mv prop-develop prop && rm prop-develop.zip
-
-    wget https://github.com/samoylv/FELsource/archive/master.zip -O FELsource-master.zip && \
+RUN wget https://github.com/samoylv/FELsource/archive/master.zip -O FELsource-master.zip && \
     unzip FELsource-master.zip && mv FELsource-master FELsource && cd FELsource && gfortran -ffixed-line-length-132 pproc-fast2xy-2013-v2-06-wo-fname.for -o pproc-fast2xy-2013-v2-06-wo-fname.exe
 
 ###################

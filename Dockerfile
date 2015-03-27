@@ -17,10 +17,8 @@ ENV PYTHON_MINOR 7
 RUN apt-get update && apt-get install -y \
     build-essential gfortran \
     python${PYTHON_MAJOR}.${PYTHON_MINOR}-dev \
-    unzip python-numpy \
-    python-scipy python-h5py \ 
-    wget \
-    nano
+    unzip python-numpy python-scipy python-h5py \ 
+    wget nano && apt-get clean && apt-get autoclean
 ###################
 # Install WPG
 ###################

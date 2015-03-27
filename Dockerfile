@@ -31,7 +31,7 @@ RUN mkdir -p $ROOT_DIR/packages && cd $ROOT_DIR/packages && \
 # Install FEL
 ###################
 
-RUN wget https://github.com/samoylv/FELsource/archive/master.zip -O FELsource-master.zip && \
+RUN mkdir -p $ROOT_DIR/modules && wget https://github.com/samoylv/FELsource/archive/master.zip -O FELsource-master.zip && \
     unzip FELsource-master.zip && mv FELsource-master FELsource && cd FELsource && gfortran -ffixed-line-length-132 pproc-fast2xy-2013-v2-06-wo-fname.for -o pproc-fast2xy-2013-v2-06-wo-fname.exe
 
 ###################

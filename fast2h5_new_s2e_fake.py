@@ -14,6 +14,21 @@
 
 import shutil
 import os
+import errno
+
+def mkdir_p(path):
+    """
+    Create directory tree, if not exists (mkdir -p)
+    
+    :param path: Path to be created
+    """
+    try:
+        os.makedirs(path)
+    except OSError as exc:  # Python >2.5
+        if exc.errno == errno.EEXIST and os.path.isdir(path):
+            pass
+        else:
+            raise
 
 def main():
     from optparse import OptionParser
@@ -28,6 +43,7 @@ def main():
     else:
         out_dir=options.out_dir
 
+    mkdir_p(out_dir)    
     shutil.copyfile('FELsource_out_0000001.h5', 
         os.path.join(out_dir,'FELsource_out_0000001.h5'))
 # In[ ]:

@@ -32,7 +32,8 @@ RUN mkdir -p $ROOT_DIR/packages && cd $ROOT_DIR/packages && \
 ###################
 
 RUN mkdir -p $ROOT_DIR/modules && cd $ROOT_DIR/modules && wget https://github.com/samoylv/FELsource/archive/master.zip -O FELsource-master.zip && \
-    unzip FELsource-master.zip && mv FELsource-master FELsource && cd FELsource && gfortran -ffixed-line-length-132 pproc-fast2xy-2013-v2-06-wo-fname.for -o pproc-fast2xy-2013-v2-06-wo-fname.exe
+    unzip FELsource-master.zip && mv FELsource-master FELsource && cd FELsource && gfortran -ffixed-line-length-132 pproc-fast2xy-2013-v2-06-wo-fname.for -o pproc-fast2xy-2013-v2-06-wo-fname.exe && \
+    wget https://dl.dropboxusercontent.com/u/1592306/FELsource_out_0000001.h5?dl=0 -O FELsource_out_0000001.h5
 
 ###################
 # Setup directories

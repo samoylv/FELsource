@@ -43,5 +43,5 @@ RUN cd $ROOT_DIR && \
     ln -s /simS2E/workflow workflow && \
     ln -s /simS2E/config config && \
     ln -s /simS2E/data data && \
-    ln -s /simS2E/modules modules && \
+#    ln -s /simS2E/modules modules && \
     ln -s /simS2E/tmp tmp

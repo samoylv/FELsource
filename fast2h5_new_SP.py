@@ -567,7 +567,7 @@ def main():
     parser.add_option("-r", "--run-number",          dest="ifb",     help="XXXX Run number (Input file name TXXXXYYY.RES)")
     parser.add_option("-z", "--zc-point-num",        dest="nzc",     help="YYY	Number of output point along undulator, zc")
     parser.add_option("-p", "--prefix",              dest="namg",    help="Prefix of FEL data files")
-    parser.add_option("-C", "--e-charge",            dest="e_charge",help="Suffix for e-bunch charge")
+    #parser.add_option("-C", "--e-charge",            dest="e_charge",help="Suffix for e-bunch charge")
 
     (options, args) = parser.parse_args()
        
@@ -626,12 +626,13 @@ def main():
     else:
         dir_prefix=options.namg
 
-    if not options.e_charge: # if prefix is not given
-        e_charge = '100pC'
-    else:
-        e_charge=options.e_charge
+    #fixing issue #21: 
+    #if not options.e_charge: # if prefix is not given
+    #    e_charge = '100pC'
+    #else:
+    #    e_charge=options.e_charge
 
-    fel_data_dir=dir_prefix+e_charge+'_N1'
+    fel_data_dir=dir_prefix #+e_charge+'_N1' <-fixing issue #21
     in_fast2xydat='PPROC-FAST2XY_2013.DAT'
     nharm = NHARM
     
@@ -659,7 +660,9 @@ def main():
     ##namg,ifb,nzc = update(in_fast2xydat,fast2xydat,trd1=trd1,trd2=trd2,nskip=nskip,nzc=nzc) 
     # [LS-2015-02-04] cancel, back to taking run num from parameter list
     namg,ifb,nzc = update(in_fast2xydat,fast2xydat,trd1=trd1,trd2=trd2,ifb=ifb,nskip=nskip,nzc=nzc)
-    fast_readme = os.path.join(fel_data_path,dir_prefix+e_charge+'_N1_readme.txt')
+    #fixing issue #21:
+    #fast_readme = os.path.join(fel_data_path,dir_prefix+e_charge+'_N1_readme.txt')
+    fast_readme = os.path.join(fel_data_path,dir_prefix+'_readme.txt')
     if doPrint: print 'namg,ifb,nzc:',namg,ifb,nzc
     #shutil.copy(os.path.join(work_dir,fast2xydat), tmp_dir)
     #shutil.copy(os.path.join(work_dir,fast2xyexe), tmp_dir)  
@@ -702,15 +705,18 @@ else:
     root_dir = '/diskmnt/a/lsamoylv'
     prj_dir = 'sim_5kev_9fs_35_2NIP_EMC_new'
     fel_data_path='/pnfs/desy.de/exfel/disk/XFEL/sim/fast/public/' #'/pnfs/desy.de/exfel/disk/XFEL/2013/SIM/FAST/'
-    dir_prefix='2014-05_XFEL_5keV_12GeV_';
+    dir_prefix='2014-05_XFEL_5keV_12GeV_100pC_N1';
     in_fast2xydat='PPROC-FAST2XY_2013.DAT'
-    e_charge='100pC';ifb=1;suffix='0000001';trd1=3.;trd2=29;nskip=12;nzc=35
-    fel_data_dir=dir_prefix+e_charge+'_N1'
+    #e_charge='100pC'; #see issue #21 
+    ifb=1;suffix='0000001';trd1=3.;trd2=29;nskip=12;nzc=35
+    fel_data_dir=dir_prefix#+e_charge+'_N1'#see issue #21 
     nharm = NHARM
     
     fel_data_path=fel_data_path+fel_data_dir
     in_fast2xydat = os.path.join(fel_data_path,in_fast2xydat) 
-    fast_readme = os.path.join(fel_data_path,dir_prefix+e_charge+'_N1_readme.txt')
+    ##see issue #21 
+    #fast_readme = os.path.join(fel_data_path,dir_prefix+e_charge+'_N1_readme.txt')
+    fast_readme = os.path.join(fel_data_path,dir_prefix+'_readme.txt')
     fast_internal = os.path.join(fel_data_path,'FAST_2013.DAT')
     doPrint = True # switch on/off debug printing    
     doCopyRes = True # switch on/off copying results into FELsource/prop_in_XXX.h5    
@@ -735,7 +741,6 @@ else:
     namg,ifb,nzc = update(in_fast2xydat,fast2xydat,trd1=trd1,trd2=trd2,nskip=nskip,nzc=nzc) 
     # [LS-2014-12-16] run number should be taken from fast2xydat!
 #    namg,ifb,nzc = update(in_fast2xydat,fast2xydat,trd1=trd1,trd2=trd2,ifb=ifb,nskip=nskip,nzc=nzc)
-    fast_readme = os.path.join(fel_data_path,dir_prefix+e_charge+'_N1_readme.txt')
     if doPrint: print 'namg,ifb,nzc:',namg,ifb,nzc
     #shutil.copy(os.path.join(work_dir,fast2xydat), tmp_dir)
     #shutil.copy(os.path.join(work_dir,fast2xyexe), tmp_dir)  
@@ -758,7 +763,7 @@ else:
 
 # <codecell>
 
-if doPrint: 
+if isIpynb and doPrint: 
     the_file = h5py.File(os.path.join(out_dir,prop_in_fname),"r")
     #with the_file as h5file:
     print 'polarization: %s' %(the_file['/misc/electricField'].value)

@@ -659,7 +659,9 @@ def main():
     ## [LS-2014-12-16] run number should be taken from fast2xydat!
     ##namg,ifb,nzc = update(in_fast2xydat,fast2xydat,trd1=trd1,trd2=trd2,nskip=nskip,nzc=nzc) 
     # [LS-2015-02-04] cancel, back to taking run num from parameter list
+    print 'namg,ifb,nzc:',namg,ifb,nzc
     namg,ifb,nzc = update(in_fast2xydat,fast2xydat,trd1=trd1,trd2=trd2,ifb=ifb,nskip=nskip,nzc=nzc)
+    print 'namg,ifb,nzc:',namg,ifb,nzc
     #fixing issue #21:
     #fast_readme = os.path.join(fel_data_path,dir_prefix+e_charge+'_N1_readme.txt')
     fast_readme = os.path.join(fel_data_path,dir_prefix+'_readme.txt')

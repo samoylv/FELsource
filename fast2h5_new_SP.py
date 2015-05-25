@@ -515,8 +515,12 @@ def convert_fast2h5(fel_data_path,fast2xyexe,fast2xydat,fast_readme,fast_interna
     f_in = open(fast2xydat,'r')
     
     e_data =  numpy.loadtxt(set_ABCDname(namg,'E'+str(nharm),ifb,nzc))
-    ff_data = numpy.loadtxt(os.path.join(fel_data_path,set_ABCDname(namg,'F'+str(nharm),ifb,nzc)))
-    nf_data = numpy.loadtxt(os.path.join(fel_data_path,set_ABCDname(namg,'N'+str(nharm),ifb,nzc)))
+    if os.path.isfile(os.path.join(fel_data_path,set_ABCDname(namg,'F'+str(nharm),ifb,nzc))): 
+        ff_data = numpy.loadtxt(os.path.join(fel_data_path,set_ABCDname(namg,'F'+str(nharm),ifb,nzc)))
+    else: ff_data=a = numpy.zeros(shape=(2,2), dtype=float64)
+    if os.path.isfile(os.path.join(fel_data_path,set_ABCDname(namg,'N'+str(nharm),ifb,nzc))):
+        nf_data = numpy.loadtxt(os.path.join(fel_data_path,set_ABCDname(namg,'N'+str(nharm),ifb,nzc)))
+    else: nf_data=a = numpy.zeros(shape=(2,2), dtype=float64)
     pz_data_file = set_pzname(namg,ifb)
     pz_data = numpy.loadtxt(os.path.join(fel_data_path,pz_data_file))
     wf_struct['history/parent/misc']={

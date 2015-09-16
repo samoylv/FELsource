@@ -5,7 +5,7 @@ MAINTAINER Alexey Buzmakov <buzmakov@gmail.com>
 ###################
 # Setup environment
 ###################
-ENV ROOT_DIR /data/S2E
+ENV ROOT_DIR /simS2E
 RUN mkdir -p $ROOT_DIR
 
 
